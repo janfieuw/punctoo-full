@@ -1,0 +1,44 @@
+<%- include("../partials/head", { title: "ScanTags - MyPunctoo", badge: company.company_name, topLink: {href:"/my", label:"Terug"}, logoutForm: {action:"/logout"} }) %>
+
+<div class="card">
+  <div class="h1">ScanTags</div>
+  <div class="p">Tags zijn altijd downloadbaar als PDF.</div>
+
+  <% if (error) { %><div class="notice" style="margin:12px 0"><%= error %></div><% } %>
+
+  <form method="post" action="/my/tags" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px">
+      <label>Nieuwe ScanTag</label>
+      <input name="tag_name" placeholder="Bijv. Ingang magazijn"/>
+    </div>
+    <button class="btn accent" type="submit">Aanmaken</button>
+  </form>
+
+  <div class="hr"></div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Naam</th>
+        <th>Code</th>
+        <th>Download</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% tags.forEach(t => { %>
+        <tr>
+          <td><%= t.tag_name %></td>
+          <td style="font-weight:800"><%= t.tag_code %></td>
+          <td>
+            <a class="btn" href="/my/tags/<%= t.id %>/pdf">PDF</a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <div class="hr"></div>
+  <a class="btn accent" href="/my/order-scantag">Extra ScanTag bestellen</a>
+</div>
+
+<%- include("../partials/foot") %>

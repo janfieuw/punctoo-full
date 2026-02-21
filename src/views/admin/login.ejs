@@ -1,0 +1,21 @@
+<%- include("../partials/head", { title: "Admin login - MyPunctoo", badge: "Admin" }) %>
+
+<div class="card" style="max-width:520px">
+  <div class="h1">Admin login</div>
+  <div class="p">Alleen voor beheer.</div>
+
+  <% if (error) { %><div class="notice" style="margin:12px 0"><%= error %></div><% } %>
+
+  <form method="post" action="/admin/login">
+    <label>E-mail</label>
+    <input name="email" type="email" value="<%= email || '' %>" required/>
+    <label>Wachtwoord</label>
+    <input name="password" type="password" required/>
+    <div class="hr"></div>
+    <button class="btn accent" type="submit">Inloggen</button>
+  </form>
+
+  <div class="small" style="margin-top:10px">Tip: zet ADMIN_EMAIL en ADMIN_PASSWORD in je .env.</div>
+</div>
+
+<%- include("../partials/foot") %>

@@ -1,0 +1,17 @@
+<%- include("../partials/head", { title: "Admin - MyPunctoo", badge: "Admin", logoutForm: {action:"/admin/logout"} }) %>
+
+<div class="card">
+  <div class="h1">Admin dashboard</div>
+  <div class="p">Overzicht van nieuwe acties.</div>
+
+  <div class="kpi">
+    <div class="pill">Nieuwe inschrijvingen: <%= kpis.newSignups %></div>
+    <div class="pill">Nieuwe bestellingen: <%= kpis.newOrders %></div>
+  </div>
+
+  <div class="hr"></div>
+
+  <a class="btn accent" href="/admin/customers">Klanten openen</a>
+</div>
+
+<%- include("../partials/foot") %>

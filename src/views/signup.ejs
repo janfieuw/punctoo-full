@@ -1,0 +1,81 @@
+<%- include("partials/head", { title: "Account aanmaken - MyPunctoo", badge: "Full", topLink: {href:"/login", label:"Ik heb al een account"} }) %>
+
+<div class="card">
+  <div class="h1">Account aanmaken</div>
+  <div class="p">Vul je bedrijfsgegevens en leveringsadres in.</div>
+
+  <% if (error) { %><div class="notice" style="margin:12px 0"><%= error %></div><% } %>
+
+  <form method="post" action="/signup">
+    <div class="grid">
+      <div>
+        <div class="h2">Login</div>
+        <label>E-mail *</label>
+        <input name="email" type="email" value="<%= values.email || '' %>" required/>
+        <label>Wachtwoord * (min. 8 tekens)</label>
+        <input name="password" type="password" required/>
+      </div>
+
+      <div>
+        <div class="h2">Bedrijf</div>
+        <label>Bedrijfsnaam *</label>
+        <input name="company_name" value="<%= values.company_name || '' %>" required/>
+        <label>BTW-nummer *</label>
+        <input name="vat_number" value="<%= values.vat_number || '' %>" required/>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="grid">
+      <div>
+        <div class="h2">Bedrijfsadres</div>
+        <label>Adreslijn 1 *</label>
+        <input name="company_address_line1" value="<%= values.company_address_line1 || '' %>" required/>
+        <label>Adreslijn 2</label>
+        <input name="company_address_line2" value="<%= values.company_address_line2 || '' %>"/>
+        <div class="row">
+          <div>
+            <label>Postcode *</label>
+            <input name="company_postcode" value="<%= values.company_postcode || '' %>" required/>
+          </div>
+          <div>
+            <label>Stad *</label>
+            <input name="company_city" value="<%= values.company_city || '' %>" required/>
+          </div>
+        </div>
+        <label>Land *</label>
+        <input name="company_country" value="<%= values.company_country || 'BE' %>" required/>
+      </div>
+
+      <div>
+        <div class="h2">Leveringsadres</div>
+        <label>Naam (t.a.v.) *</label>
+        <input name="delivery_name" value="<%= values.delivery_name || '' %>" required/>
+        <label>Adreslijn 1 *</label>
+        <input name="delivery_address_line1" value="<%= values.delivery_address_line1 || '' %>" required/>
+        <label>Adreslijn 2</label>
+        <input name="delivery_address_line2" value="<%= values.delivery_address_line2 || '' %>"/>
+        <div class="row">
+          <div>
+            <label>Postcode *</label>
+            <input name="delivery_postcode" value="<%= values.delivery_postcode || '' %>" required/>
+          </div>
+          <div>
+            <label>Stad *</label>
+            <input name="delivery_city" value="<%= values.delivery_city || '' %>" required/>
+          </div>
+        </div>
+        <label>Land *</label>
+        <input name="delivery_country" value="<%= values.delivery_country || 'BE' %>" required/>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <button class="btn accent" type="submit">Account aanmaken</button>
+    <div class="small" style="margin-top:10px">Na registratie kom je in MyPunctoo.</div>
+  </form>
+</div>
+
+<%- include("partials/foot") %>

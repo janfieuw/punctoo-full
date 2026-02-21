@@ -1,0 +1,69 @@
+<%- include("../partials/head", { title: "Klantfiche - Admin", badge: "Admin", topLink: {href:"/admin/customers", label:"Terug naar lijst"}, logoutForm: {action:"/admin/logout"} }) %>
+
+<div class="card">
+  <div class="h1">Klantfiche</div>
+
+  <div class="kpi">
+    <div class="pill">Klantnummer: <%= company.customer_number %></div>
+    <div class="pill">Start abonnement: <%= company.subscription_start_date %></div>
+    <div class="pill">BTW: <%= company.vat_number %></div>
+  </div>
+
+  <div class="hr"></div>
+
+  <div class="grid">
+    <div>
+      <div class="h2">Bedrijfsgegevens</div>
+      <div><b><%= company.company_name %></b></div>
+      <div class="small"><%= company.company_address_line1 %> <%= company.company_address_line2 || "" %></div>
+      <div class="small"><%= company.company_postcode %> <%= company.company_city %> (<%= company.company_country %>)</div>
+    </div>
+    <div>
+      <div class="h2">Leveringsadres</div>
+      <div><b><%= company.delivery_name %></b></div>
+      <div class="small"><%= company.delivery_address_line1 %> <%= company.delivery_address_line2 || "" %></div>
+      <div class="small"><%= company.delivery_postcode %> <%= company.delivery_city %> (<%= company.delivery_country %>)</div>
+    </div>
+  </div>
+
+  <div class="hr"></div>
+
+  <div class="grid">
+    <div>
+      <div class="h2">ScanTags</div>
+      <% if (!tags.length) { %>
+        <div class="p">Geen tags.</div>
+      <% } %>
+      <table class="table">
+        <thead><tr><th>Naam</th><th>Code</th></tr></thead>
+        <tbody>
+          <% tags.forEach(t => { %>
+            <tr><td><%= t.tag_name %></td><td style="font-weight:800"><%= t.tag_code %></td></tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="h2">Bestellingen extra ScanTags</div>
+      <% if (!orders.length) { %>
+        <div class="p">Geen bestellingen.</div>
+      <% } %>
+      <table class="table">
+        <thead><tr><th>Datum</th><th>Aantal</th><th>Status</th></tr></thead>
+        <tbody>
+          <% orders.forEach(o => { %>
+            <tr>
+              <td><%= new Date(o.created_at).toISOString().slice(0,10) %></td>
+              <td style="font-weight:800"><%= o.quantity %></td>
+              <td><%= o.status %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <div class="small" style="margin-top:10px">Leveringsadres per order staat in de DB (zichtbaar bij uitbreiding).</div>
+    </div>
+  </div>
+</div>
+
+<%- include("../partials/foot") %>

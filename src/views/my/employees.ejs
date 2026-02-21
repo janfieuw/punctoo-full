@@ -1,0 +1,44 @@
+<%- include("../partials/head", { title: "Werknemers - MyPunctoo", badge: company.company_name, topLink: {href:"/my", label:"Terug"}, logoutForm: {action:"/logout"} }) %>
+
+<div class="card">
+  <div class="h1">Werknemers</div>
+  <div class="p">Onbeperkt. Per werknemer blijft de koppelcode zichtbaar.</div>
+
+  <% if (error) { %><div class="notice" style="margin:12px 0"><%= error %></div><% } %>
+
+  <form method="post" action="/my/employees" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px">
+      <label>Nieuwe werknemer</label>
+      <input name="employee_name" placeholder="Naam werknemer"/>
+    </div>
+    <button class="btn accent" type="submit">Toevoegen</button>
+  </form>
+
+  <div class="hr"></div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Naam</th>
+        <th>Koppelcode</th>
+        <th>Wijzigen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% employees.forEach(e => { %>
+        <tr>
+          <td><%= e.employee_name %></td>
+          <td style="font-weight:800"><%= e.pairing_code %></td>
+          <td>
+            <form method="post" action="/my/employees/<%= e.id %>/update-name" style="display:flex;gap:8px;align-items:center;margin:0">
+              <input name="employee_name" value="<%= e.employee_name %>"/>
+              <button class="btn" type="submit">Opslaan</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include("../partials/foot") %>

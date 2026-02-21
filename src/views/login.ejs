@@ -1,0 +1,18 @@
+<%- include("partials/head", { title: "Login - MyPunctoo", badge: "Full", topLink: {href:"/signup", label:"Account aanmaken"} }) %>
+
+<div class="card" style="max-width:520px">
+  <div class="h1">Login</div>
+  <div class="p">Welkom terug.</div>
+  <% if (error) { %><div class="notice" style="margin:12px 0"><%= error %></div><% } %>
+
+  <form method="post" action="/login">
+    <label>E-mail</label>
+    <input name="email" type="email" value="<%= email || '' %>" required/>
+    <label>Wachtwoord</label>
+    <input name="password" type="password" required/>
+    <div class="hr"></div>
+    <button class="btn accent" type="submit">Inloggen</button>
+  </form>
+</div>
+
+<%- include("partials/foot") %>

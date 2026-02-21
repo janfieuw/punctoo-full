@@ -1,0 +1,31 @@
+<%- include("../partials/head", { title: "Klanten - Admin", badge: "Admin", topLink: {href:"/admin", label:"Terug"}, logoutForm: {action:"/admin/logout"} }) %>
+
+<div class="card">
+  <div class="h1">Klanten</div>
+  <div class="p">Gesorteerd op start abonnement.</div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Start abonnement</th>
+        <th>Klantnr</th>
+        <th>Bedrijf</th>
+        <th>BTW</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% customers.forEach(c => { %>
+        <tr>
+          <td><%= c.subscription_start_date %></td>
+          <td style="font-weight:800"><%= c.customer_number %></td>
+          <td><a class="btn ghost" href="/admin/customers/<%= c.id %>"><%= c.company_name %></a></td>
+          <td><%= c.vat_number %></td>
+          <td><%= c.admin_seen ? "gezien" : "nieuw" %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include("../partials/foot") %>
