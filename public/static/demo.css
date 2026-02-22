@@ -308,3 +308,20 @@
 .demo-btn.secondary:hover {
   background: #c29a00;
 }
+
+
+/* =========================
+   FIX: ensure form elements are clickable (no overlay issues)
+   ========================= */
+.demo-left, .demo-left-content, .demo-left-inner {
+  position: relative;
+  z-index: 5;
+}
+
+.demo-form, .demo-form * {
+  pointer-events: auto;
+}
+
+.demo-right {
+  z-index: 1;
+}
