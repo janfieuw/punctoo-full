@@ -1,0 +1,25 @@
+<%- include("partials/head", { title }) %>
+
+<div class="topbar">
+  <div class="left">
+    <span class="dot"></span>
+    <span>MyPunctoo</span>
+    <% if (badge) { %><span class="pill"><%= badge %></span><% } %>
+  </div>
+  <div>
+    <% if (topLink) { %>
+      <a class="btn ghost" href="<%= topLink.href %>"><%= topLink.label %></a>
+    <% } %>
+    <% if (logoutAction) { %>
+      <form method="post" action="<%= logoutAction %>" style="display:inline;margin-left:10px">
+        <button class="btn ghost" type="submit">Uitloggen</button>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <%- body %>
+</div>
+
+<%- include("partials/foot") %>

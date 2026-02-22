@@ -1,36 +1,39 @@
-<%- include("../partials/head", { title: "MyPunctoo", badge: company.company_name, logoutForm: {action:"/logout"} }) %>
-
-<div class="card">
-  <div class="h1">MyPunctoo</div>
-  <div class="kpi">
-    <div class="pill">Klantnummer: <%= company.customer_number %></div>
-    <div class="pill">Start abonnement: <%= company.subscription_start_date %></div>
-    <div class="pill">BTW: <%= company.vat_number %></div>
-  </div>
-
-  <div class="hr"></div>
-
-  <div class="grid">
-    <div>
-      <div class="h2">Werknemers</div>
-      <div class="p">Onbeperkt. Koppelcode blijft zichtbaar.</div>
-      <a class="btn" href="/my/employees">Open werknemersbeheer</a>
-      <div class="small" style="margin-top:10px">Aantal: <%= employees.length %></div>
+<% const body = `
+  <div class="card">
+    <div class="h1">MyPunctoo</div>
+    <div class="kpi">
+      <div class="pill-light">Klantnummer: ${company.customer_number}</div>
+      <div class="pill-light">Start abonnement: ${subscriptionStart}</div>
+      <div class="pill-light">BTW: ${company.vat_number}</div>
     </div>
-    <div>
-      <div class="h2">ScanTags</div>
-      <div class="p">Altijd downloadbaar als PDF.</div>
-      <a class="btn" href="/my/tags">Open tagbeheer</a>
-      <div class="row" style="margin-top:10px">
-        <a class="btn accent" href="/my/order-scantag">Extra ScanTag bestellen</a>
+
+    <div class="hr"></div>
+
+    <div class="grid-2">
+      <div>
+        <div class="h2">Werknemers</div>
+        <div class="p">Onbeperkt. Koppelcode blijft zichtbaar.</div>
+        <a class="btn" href="/my/employees">Open werknemersbeheer</a>
+        <div class="small" style="margin-top:10px">Aantal: ${employees.length}</div>
       </div>
-      <div class="small" style="margin-top:10px">Aantal: <%= tags.length %></div>
+      <div>
+        <div class="h2">ScanTags</div>
+        <div class="p">Altijd downloadbaar als PDF.</div>
+        <a class="btn" href="/my/tags">Open tagbeheer</a>
+        <div style="margin-top:12px">
+          <a class="btn accent" style="width:100%" href="/my/order-scantag">Extra ScanTag bestellen</a>
+        </div>
+        <div class="small" style="margin-top:10px">Aantal: ${tags.length}</div>
+      </div>
     </div>
+
+    ${orderOk ? `<div class="notice" style="margin-top:14px">Bestelling ontvangen.</div>` : ``}
   </div>
+` %>
 
-  <% if (orderOk) { %>
-    <div class="notice" style="margin-top:12px">Bestelling ontvangen. We nemen dit mee in productie en levering.</div>
-  <% } %>
-</div>
-
-<%- include("../partials/foot") %>
+<%- include("_layout", {
+  title: "MyPunctoo",
+  badge: company.company_name,
+  logoutAction: "/logout",
+  body
+}) %>

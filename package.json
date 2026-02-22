@@ -1,22 +1,21 @@
 {
   "name": "mypunctoo-full",
-  "version": "1.0.0",
-  "private": true,
-  "type": "commonjs",
+  "version": "0.1.0",
   "main": "src/server.js",
+  "type": "commonjs",
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cookie-parser": "^1.4.6",
+    "connect-pg-simple": "^9.0.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
-    "helmet": "^7.1.0",
-    "pdfkit": "^0.15.0",
+    "express-session": "^1.17.3",
     "pg": "^8.12.0",
+    "pdfkit": "^0.15.0",
     "qrcode": "^1.5.4",
     "uuid": "^9.0.1"
   }

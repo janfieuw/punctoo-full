@@ -1,40 +1,47 @@
-<%- include("../partials/head", { title: "Extra ScanTag bestellen - MyPunctoo", badge: company.company_name, topLink: {href:"/my", label:"Terug"}, logoutForm: {action:"/logout"} }) %>
+<% const body = `
+  <div class="card" style="max-width:720px">
+    <div class="h1">Extra ScanTag bestellen</div>
+    <div class="p">Om fouten te vermijden vragen we het leveringsadres opnieuw.</div>
 
-<div class="card" style="max-width:720px">
-  <div class="h1">Extra ScanTag bestellen</div>
-  <div class="p">Om fouten te vermijden vragen we het leveringsadres opnieuw.</div>
+    ${error ? `<div class="notice" style="margin:12px 0">${error}</div>` : ``}
 
-  <% if (error) { %><div class="notice" style="margin:12px 0"><%= error %></div><% } %>
+    <form method="post" action="/my/order-scantag">
+      <label>Naam (t.a.v.) *</label>
+      <input name="delivery_name" value="${values.delivery_name || ""}" required/>
 
-  <form method="post" action="/my/order-scantag">
-    <label>Naam (t.a.v.) *</label>
-    <input name="delivery_name" value="<%= values.delivery_name || '' %>" required/>
+      <label>Adreslijn 1 *</label>
+      <input name="delivery_address_line1" value="${values.delivery_address_line1 || ""}" required/>
 
-    <label>Adreslijn 1 *</label>
-    <input name="delivery_address_line1" value="<%= values.delivery_address_line1 || '' %>" required/>
-    <label>Adreslijn 2</label>
-    <input name="delivery_address_line2" value="<%= values.delivery_address_line2 || '' %>"/>
+      <label>Adreslijn 2</label>
+      <input name="delivery_address_line2" value="${values.delivery_address_line2 || ""}"/>
 
-    <div class="row">
-      <div>
-        <label>Postcode *</label>
-        <input name="delivery_postcode" value="<%= values.delivery_postcode || '' %>" required/>
+      <div class="row">
+        <div>
+          <label>Postcode *</label>
+          <input name="delivery_postcode" value="${values.delivery_postcode || ""}" required/>
+        </div>
+        <div>
+          <label>Stad *</label>
+          <input name="delivery_city" value="${values.delivery_city || ""}" required/>
+        </div>
       </div>
-      <div>
-        <label>Stad *</label>
-        <input name="delivery_city" value="<%= values.delivery_city || '' %>" required/>
-      </div>
-    </div>
 
-    <label>Land *</label>
-    <input name="delivery_country" value="<%= values.delivery_country || 'BE' %>" required/>
+      <label>Land *</label>
+      <input name="delivery_country" value="${values.delivery_country || "BE"}" required/>
 
-    <label>Aantal *</label>
-    <input name="quantity" type="number" min="1" value="<%= values.quantity || 1 %>" required/>
+      <label>Aantal *</label>
+      <input name="quantity" type="number" min="1" value="${values.quantity || 1}" required/>
 
-    <div class="hr"></div>
-    <button class="btn accent" type="submit">Bestelling plaatsen</button>
-  </form>
-</div>
+      <div class="hr"></div>
+      <button class="btn accent" type="submit">Bestelling plaatsen</button>
+    </form>
+  </div>
+` %>
 
-<%- include("../partials/foot") %>
+<%- include("_layout", {
+  title: "Extra ScanTag bestellen - MyPunctoo",
+  badge: company.company_name,
+  topLink: { href: "/my", label: "Terug" },
+  logoutAction: "/logout",
+  body
+}) %>

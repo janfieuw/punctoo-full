@@ -1,0 +1,32 @@
+<%- include("partials/head", { title, bodyClass: "demo-body" }) %>
+
+<div class="demo-shell">
+  <div class="demo-left">
+    <div class="demo-left-inner">
+      <div class="demo-title">DEMO UITTESTEN<br/>IN 5 STAPPEN</div>
+      <div class="demo-intro">
+        Doorloop de wizard van 5 stappen. Na afloop ben je meteen klaar om te gaan testen.
+      </div>
+
+      <div class="demo-step-title"><%= stepTitle %></div>
+
+      <div class="demo-form-wrap">
+        <%- body %>
+      </div>
+
+      <div class="demo-footer">
+        <img src="/static/logo_punctoo_groot_opgeel.png" alt="Punctoo" />
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-right">
+    <div class="demo-right-inner">
+      <img class="demo-right-img" src="/static/demo-wall.png" alt="" />
+      <img class="demo-lady" src="/static/demo-lady-hidden.png" alt="" />
+      <img class="demo-overlay" src="/static/demo-right.svg" alt="" />
+    </div>
+  </div>
+</div>
+
+<%- include("partials/foot") %>

@@ -5,43 +5,39 @@ async function makeTagPdf({ companyName, tagName, tagCode, baseUrl }) {
   const doc = new PDFDocument({ size: "A4", margin: 40 });
   const chunks = [];
   doc.on("data", (c) => chunks.push(c));
+  const done = new Promise((resolve) => doc.on("end", () => resolve(Buffer.concat(chunks))));
 
-  doc.fontSize(18).text("ScanTag", { align: "left" });
-  doc.moveDown(0.3);
-  doc.fontSize(12).fillColor("#444").text(companyName);
-  doc.fillColor("#000");
+  // White background
+  doc.rect(0, 0, doc.page.width, doc.page.height).fill("#FFFFFF");
+  doc.fillColor("#000000");
+
+  doc.fontSize(22).font("Helvetica-Bold").text(companyName, { align: "left" });
+  doc.moveDown(0.5);
+  doc.fontSize(16).font("Helvetica-Bold").text(tagName);
+  doc.fontSize(12).font("Helvetica").text(`Code: ${tagCode}`);
   doc.moveDown(1);
 
-  doc.fontSize(16).text(tagName);
-  doc.fontSize(12).fillColor("#444").text(`Code: ${tagCode}`);
-  doc.fillColor("#000");
-  doc.moveDown(1);
+  const inUrl = `${baseUrl}/scan/in/${encodeURIComponent(tagCode)}`;
+  const outUrl = `${baseUrl}/scan/out/${encodeURIComponent(tagCode)}`;
 
-  // Two QR codes: IN and OUT
-  const inUrl = `${baseUrl}/scan/${encodeURIComponent(tagCode)}/in`;
-  const outUrl = `${baseUrl}/scan/${encodeURIComponent(tagCode)}/out`;
+  const inPng = await QRCode.toDataURL(inUrl, { margin: 1, width: 260 });
+  const outPng = await QRCode.toDataURL(outUrl, { margin: 1, width: 260 });
 
-  const inData = await QRCode.toDataURL(inUrl, { margin: 1, width: 220 });
-  const outData = await QRCode.toDataURL(outUrl, { margin: 1, width: 220 });
+  const imgFromDataUrl = (dataUrl) => Buffer.from(dataUrl.split(",")[1], "base64");
 
-  const x = doc.x;
-  const y = doc.y;
+  const x1 = 80, y = 220;
+  doc.fontSize(14).font("Helvetica-Bold").text("IN", x1 + 90, y - 30);
+  doc.image(imgFromDataUrl(inPng), x1, y, { width: 260 });
 
-  doc.fontSize(14).text("IN", x, y);
-  doc.image(inData, x, y + 20, { width: 220 });
+  const x2 = 330;
+  doc.fontSize(14).font("Helvetica-Bold").text("OUT", x2 + 80, y - 30);
+  doc.image(imgFromDataUrl(outPng), x2, y, { width: 260 });
 
-  doc.fontSize(14).text("OUT", x + 260, y);
-  doc.image(outData, x + 260, y + 20, { width: 220 });
-
-  doc.moveDown(15);
-  doc.fontSize(10).fillColor("#666")
-     .text("Tip: print deze pagina of bewaar als PDF. QR-codes blijven altijd geldig.", { align: "left" });
+  doc.moveTo(60, y + 280).lineTo(535, y + 280).strokeColor("#DDD").stroke();
+  doc.fillColor("#555").fontSize(10).text("ScanTag PDF — MyPunctoo", 60, y + 300);
 
   doc.end();
-
-  return await new Promise((resolve) => {
-    doc.on("end", () => resolve(Buffer.concat(chunks)));
-  });
+  return done;
 }
 
 module.exports = { makeTagPdf };

@@ -1,14 +1,12 @@
-const crypto = require("crypto");
+function safeTrim(v) {
+  return (v || "").toString().trim();
+}
 
-function randomCode(len = 6) {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no confusing chars
+function randomCode(len) {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let out = "";
   for (let i = 0; i < len; i++) out += chars[Math.floor(Math.random() * chars.length)];
   return out;
-}
-
-function safeTrim(v) {
-  return String(v || "").trim();
 }
 
 function requireFields(obj, fields) {
@@ -19,8 +17,4 @@ function requireFields(obj, fields) {
   return missing;
 }
 
-function normalizeVat(v) {
-  return safeTrim(v).replace(/\s+/g, "").toUpperCase();
-}
-
-module.exports = { randomCode, safeTrim, requireFields, normalizeVat };
+module.exports = { safeTrim, randomCode, requireFields };

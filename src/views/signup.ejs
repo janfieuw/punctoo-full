@@ -1,105 +1,64 @@
-<%- include("partials/head", {
-  title: "DEMO — ACCOUNT AANMAKEN",
-  hideTopbar: true,
-  skipAppCss: true,
-  bodyClass: "demo-body",
-  pageCss: "/static/demo.css"
-}) %>
+<% const body = `
+  ${error ? `<div class="demo-error">${error}</div>` : ``}
 
-<div class="demo-shell">
-  <div class="demo-left">
-    <div class="demo-left-content">
-      <div class="demo-left-inner">
+  <form method="post" action="/signup" class="demo-form">
+    <label>E-mail</label>
+    <input name="email" type="email" value="${values.email || ""}" required />
 
-        <div class="demo-kicker">DEMO UITTESTEN <br> IN 5 STAPPEN</div>
-        <p class="demo-lead">
-          Doorloop de wizard van 5 stappen. <br>
-          Na afloop ben je meteen klaar om te gaan testen.<br>
-          Deze demo is beperkt tot twee werknemers en 15 dagen testtijd.
-        </p>
+    <label>Wachtwoord</label>
+    <input name="password" type="password" required />
 
-        <div class="demo-title">Stap 1: ACCOUNT AANMAKEN.</div>
+    <div class="demo-divider"></div>
 
-        <p class="demo-lead">
-          Maak een account aan. <br>
-          Kies een e-mailadres als login en vul je paswoord in.
-        </p>
+    <label>Bedrijfsnaam</label>
+    <input name="company_name" value="${values.company_name || ""}" required />
 
-        <% if (error) { %>
-          <div class="demo-alert" role="alert"><%= error %></div>
-        <% } %>
+    <label>BTW-nummer</label>
+    <input name="vat_number" value="${values.vat_number || ""}" required />
 
-        <form class="demo-form" method="POST" action="/signup">
-          <label class="demo-label">E-mail</label>
-          <input class="demo-input" name="email" type="email" placeholder="bv. jan@bedrijf.be" value="<%= values.email || '' %>" required />
+    <label>Bedrijfsadres</label>
+    <input name="company_address_line1" value="${values.company_address_line1 || ""}" placeholder="Straat + nr" required />
+    <input name="company_address_line2" value="${values.company_address_line2 || ""}" placeholder="Bus, verdieping, ... (optioneel)" />
 
-          <label class="demo-label">Paswoord</label>
-          <input class="demo-input" name="password" type="password" required />
-
-          <div class="demo-row"><hr></div>
-
-          <div class="demo-row"><div class="demo-title" style="margin:0;">Bedrijfsgegevens</div></div>
-
-          <label class="demo-label">Bedrijfsnaam</label>
-          <input class="demo-input" name="company_name" value="<%= values.company_name || '' %>" required />
-
-          <label class="demo-label">BTW-nummer</label>
-          <input class="demo-input" name="vat_number" value="<%= values.vat_number || '' %>" required />
-
-          <label class="demo-label">Adres</label>
-          <input class="demo-input" name="company_address_line1" value="<%= values.company_address_line1 || '' %>" placeholder="Straat + nr" required />
-
-          <label class="demo-label"></label>
-          <input class="demo-input" name="company_address_line2" value="<%= values.company_address_line2 || '' %>" placeholder="Bus, verdieping, ... (optioneel)" />
-
-          <label class="demo-label">Postcode</label>
-          <input class="demo-input" name="company_postcode" value="<%= values.company_postcode || '' %>" required />
-
-          <label class="demo-label">Stad</label>
-          <input class="demo-input" name="company_city" value="<%= values.company_city || '' %>" required />
-
-          <label class="demo-label">Land</label>
-          <input class="demo-input" name="company_country" value="<%= values.company_country || 'BE' %>" required />
-
-          <div class="demo-row"><hr></div>
-
-          <div class="demo-row"><div class="demo-title" style="margin:0;">Leveringsadres</div></div>
-
-          <label class="demo-label">T.a.v.</label>
-          <input class="demo-input" name="delivery_name" value="<%= values.delivery_name || '' %>" required />
-
-          <label class="demo-label">Adres</label>
-          <input class="demo-input" name="delivery_address_line1" value="<%= values.delivery_address_line1 || '' %>" placeholder="Straat + nr" required />
-
-          <label class="demo-label"></label>
-          <input class="demo-input" name="delivery_address_line2" value="<%= values.delivery_address_line2 || '' %>" placeholder="Bus, verdieping, ... (optioneel)" />
-
-          <label class="demo-label">Postcode</label>
-          <input class="demo-input" name="delivery_postcode" value="<%= values.delivery_postcode || '' %>" required />
-
-          <label class="demo-label">Stad</label>
-          <input class="demo-input" name="delivery_city" value="<%= values.delivery_city || '' %>" required />
-
-          <label class="demo-label">Land</label>
-          <input class="demo-input" name="delivery_country" value="<%= values.delivery_country || 'BE' %>" required />
-
-          <div class="demo-actions" style="display:flex; gap:10px;">
-            <button class="demo-btn primary" type="submit">ACCOUNT AANMAKEN</button>
-            <a class="demo-btn" href="/login">LOGIN</a>
-          </div>
-        </form>
-
+    <div class="demo-row">
+      <div>
+        <label>Postcode</label>
+        <input name="company_postcode" value="${values.company_postcode || ""}" required />
+      </div>
+      <div>
+        <label>Stad</label>
+        <input name="company_city" value="${values.company_city || ""}" required />
       </div>
     </div>
 
-    <div class="demo-left-footer">
-      <img class="demo-logo" src="/static/logo_punctoo_groot_opgeel.png" alt="" />
+    <label>Land</label>
+    <input name="company_country" value="${values.company_country || "BE"}" required />
+
+    <div class="demo-divider"></div>
+
+    <label>Leveringsadres</label>
+    <input name="delivery_name" value="${values.delivery_name || ""}" placeholder="T.a.v." required />
+    <input name="delivery_address_line1" value="${values.delivery_address_line1 || ""}" placeholder="Straat + nr" required />
+    <input name="delivery_address_line2" value="${values.delivery_address_line2 || ""}" placeholder="Bus, verdieping, ... (optioneel)" />
+
+    <div class="demo-row">
+      <div>
+        <label>Postcode</label>
+        <input name="delivery_postcode" value="${values.delivery_postcode || ""}" required />
+      </div>
+      <div>
+        <label>Stad</label>
+        <input name="delivery_city" value="${values.delivery_city || ""}" required />
+      </div>
     </div>
-  </div>
 
-  <div class="demo-right">
-    <img class="demo-right-lady" src="/static/demo-lady.png" alt="" />
-  </div>
-</div>
+    <label>Land</label>
+    <input name="delivery_country" value="${values.delivery_country || "BE"}" required />
 
-<%- include("partials/foot") %>
+    <button class="demo-btn" type="submit">ACCOUNT AANMAKEN</button>
+
+    <a class="demo-link" href="/login">Ik heb al een account</a>
+  </form>
+` %>
+
+<%- include("_auth_shell", { title: "Account aanmaken - MyPunctoo", stepTitle: "STAP 1: ACCOUNT AANMAKEN.", body }) %>

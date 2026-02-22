@@ -1,51 +1,17 @@
-<%- include("partials/head", {
-  title: "DEMO — LOGIN",
-  hideTopbar: true,
-  skipAppCss: true,
-  bodyClass: "demo-body",
-  pageCss: "/static/demo.css"
-}) %>
+<% const body = `
+  ${error ? `<div class="demo-error">${error}</div>` : ``}
 
-<div class="demo-shell">
-  <div class="demo-left">
-    <div class="demo-left-content">
-      <div class="demo-left-inner">
+  <form method="post" action="/login" class="demo-form">
+    <label>E-mail</label>
+    <input name="email" type="email" value="${email || ""}" required />
 
-        <div class="demo-kicker">DEMO UITTESTEN <br> IN 5 STAPPEN</div>
-        <p class="demo-lead">
-          Log in en ga verder naar je MyPunctoo back-office.
-        </p>
+    <label>Wachtwoord</label>
+    <input name="password" type="password" required />
 
-        <div class="demo-title">Login</div>
+    <button class="demo-btn" type="submit">INLOGGEN</button>
 
-        <% if (error) { %>
-          <div class="demo-alert" role="alert"><%= error %></div>
-        <% } %>
+    <a class="demo-link" href="/signup">Account aanmaken</a>
+  </form>
+` %>
 
-        <form class="demo-formtwee" method="POST" action="/login">
-          <label class="demo-label">E-mail</label>
-          <input class="demo-input" name="email" type="email" placeholder="bv. jan@bedrijf.be" value="<%= email || '' %>" required />
-
-          <label class="demo-label">Paswoord</label>
-          <input class="demo-input" name="password" type="password" required />
-
-          <div class="demo-actions" style="display:flex; gap:10px;">
-            <button class="demo-btn primary" type="submit">LOGIN</button>
-            <a class="demo-btn" href="/signup">ACCOUNT AANMAKEN</a>
-          </div>
-        </form>
-
-      </div>
-    </div>
-
-    <div class="demo-left-footer">
-      <img class="demo-logo" src="/static/logo_punctoo_groot_opgeel.png" alt="" />
-    </div>
-  </div>
-
-  <div class="demo-right">
-    <img class="demo-right-lady" src="/static/demo-lady.png" alt="" />
-  </div>
-</div>
-
-<%- include("partials/foot") %>
+<%- include("_auth_shell", { title: "Login - MyPunctoo", stepTitle: "STAP 1: ACCOUNT.", body }) %>
