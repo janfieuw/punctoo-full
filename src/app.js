@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/public", express.static(path.join(__dirname, "..", "public")));
+app.use("/static", express.static(path.join(__dirname, "..", "public", "static")));
 
 // Init DB once at boot
 initDb()

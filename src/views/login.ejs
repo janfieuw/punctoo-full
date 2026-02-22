@@ -1,38 +1,50 @@
 <%- include("partials/head", {
-  title: "Login - MyPunctoo",
+  title: "DEMO — LOGIN",
   hideTopbar: true,
-  bodyClass: "auth-demo",
-  pageCss: "/public/css/auth-demo.css"
+  skipAppCss: true,
+  bodyClass: "demo-body",
+  pageCss: "/static/demo.css"
 }) %>
 
-<div class="wrap auth-wrap">
-  <div class="demo-shell">
-    <div class="demo-left">
-      <h1>DEMO UITTESTEN<br/>IN 5 STAPPEN</h1>
-      <p class="sub">
-        Log in en ga verder met de MyPunctoo back-office.
-      </p>
+<div class="demo-shell">
+  <div class="demo-left">
+    <div class="demo-left-content">
+      <div class="demo-left-inner">
 
-      <div class="step">Stap 1: login.</div>
+        <div class="demo-kicker">DEMO UITTESTEN <br> IN 5 STAPPEN</div>
+        <p class="demo-lead">
+          Log in en ga verder naar je MyPunctoo back-office.
+        </p>
 
-      <% if (error) { %><div class="demo-error"><%= error %></div><% } %>
+        <div class="demo-title">Login</div>
 
-      <form class="demo-form" method="post" action="/login">
-        <label>E-mail *</label>
-        <input name="email" type="email" value="<%= email || '' %>" required/>
+        <% if (error) { %>
+          <div class="demo-alert" role="alert"><%= error %></div>
+        <% } %>
 
-        <label>Wachtwoord *</label>
-        <input name="password" type="password" required/>
+        <form class="demo-formtwee" method="POST" action="/login">
+          <label class="demo-label">E-mail</label>
+          <input class="demo-input" name="email" type="email" placeholder="bv. jan@bedrijf.be" value="<%= email || '' %>" required />
 
-        <button class="demo-btn" type="submit">Inloggen</button>
+          <label class="demo-label">Paswoord</label>
+          <input class="demo-input" name="password" type="password" required />
 
-        <div style="margin-top:12px;font-weight:800;">
-          <a href="/signup">Account aanmaken</a>
-        </div>
-      </form>
+          <div class="demo-actions" style="display:flex; gap:10px;">
+            <button class="demo-btn primary" type="submit">LOGIN</button>
+            <a class="demo-btn" href="/signup">ACCOUNT AANMAKEN</a>
+          </div>
+        </form>
+
+      </div>
     </div>
 
-    <div class="demo-right" aria-hidden="true"></div>
+    <div class="demo-left-footer">
+      <img class="demo-logo" src="/static/logo_punctoo_groot_opgeel.png" alt="" />
+    </div>
+  </div>
+
+  <div class="demo-right">
+    <img class="demo-right-lady" src="/static/demo-lady.png" alt="" />
   </div>
 </div>
 
