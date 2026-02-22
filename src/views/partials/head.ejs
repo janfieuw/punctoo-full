@@ -15,13 +15,15 @@
     <div class="brand">
       <div style="width:12px;height:12px;border-radius:3px;background:var(--accent)"></div>
       <div>MyPunctoo</div>
-      <% if (badge) { %><div class="badge"><%= badge %></div><% } %>
+      <% if (typeof badge !== "undefined" && badge) { %>
+        <div class="badge"><%= badge %></div>
+      <% } %>
     </div>
     <div style="display:flex;gap:10px;align-items:center;">
-      <% if (topLink) { %>
+      <% if (typeof topLink !== "undefined" && topLink) { %>
         <a class="btn ghost" href="<%= topLink.href %>"><%= topLink.label %></a>
       <% } %>
-      <% if (logoutForm) { %>
+      <% if (typeof logoutForm !== "undefined" && logoutForm) { %>
         <form method="post" action="<%= logoutForm.action %>" style="margin:0">
           <button class="btn">Uitloggen</button>
         </form>
