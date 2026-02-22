@@ -10,6 +10,9 @@ const adminRoutes = require("./routes/admin");
 
 const app = express();
 
+// Railway/Reverse proxy: allow secure cookies behind proxy (X-Forwarded-Proto)
+app.set("trust proxy", 1);
+
 const PORT = process.env.PORT || 8080;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
