@@ -1,7 +1,6 @@
 :root{
   --demo-yellow:#fdc500;
   --demo-black:#0b0b0c;
-  --demo-white:#ffffff;
 }
 body.auth-demo{
   margin:0;
@@ -46,9 +45,7 @@ body.auth-demo{
   font-weight:900;
   text-transform:uppercase;
 }
-.demo-form{
-  max-width:420px;
-}
+.demo-form{ max-width:420px; }
 .demo-form label{
   display:block;
   font-size:12px;
@@ -63,10 +60,7 @@ body.auth-demo{
   background:#fff;
   font-size:14px;
 }
-.demo-form .row{
-  display:flex;
-  gap:10px;
-}
+.demo-form .row{ display:flex; gap:10px; }
 .demo-form .row > *{flex:1}
 .demo-btn{
   margin-top:18px;
@@ -91,50 +85,10 @@ body.auth-demo{
   border:1px solid rgba(0,0,0,.2);
   font-weight:800;
 }
+
+/* Right side: exact demo image */
 .demo-right{
   position:relative;
   overflow:hidden;
-  background:
-    radial-gradient(1200px 500px at 30% 30%, rgba(255,255,255,.12), transparent 60%),
-    radial-gradient(900px 380px at 70% 60%, rgba(255,255,255,.10), transparent 60%),
-    repeating-linear-gradient(0deg, #171717 0, #171717 14px, #121212 14px, #121212 28px);
-}
-.demo-hero-card{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:40px;
-}
-.demo-hero-inner{
-  width:min(860px, 92%);
-  aspect-ratio: 16 / 9;
-  border-radius:22px;
-  background: #f8fafc;
-  box-shadow: 0 20px 60px rgba(0,0,0,.55);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  position:relative;
-}
-.demo-hero-inner::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background: linear-gradient(120deg, rgba(255,255,255,.22), transparent 40%);
-  pointer-events:none;
-}
-.demo-hero-inner .mock{
-  width:82%;
-  max-width:620px;
-}
-.demo-hero-inner .note{
-  position:absolute;
-  right:18px;
-  bottom:14px;
-  color:#111;
-  font-size:12px;
-  opacity:.55;
+  background: url("/public/grafisch/demo-wall.png") center center / cover no-repeat;
 }
