@@ -19,7 +19,16 @@ router.get("/my", requireAuth, requireCompany, async (req, res) => {
      FROM scantags WHERE company_id = $1 ORDER BY created_at DESC`,
     [company.id]
   );
-  return res.render("my/home", { user: req.user, company, employees: employees.rows, tags: tags.rows });
+
+  const orderOk = String(req.query.order || "") === "ok";
+
+  return res.render("my/home", {
+    user: req.user,
+    company,
+    employees: employees.rows,
+    tags: tags.rows,
+    orderOk,
+  });
 });
 
 // Employees list + create
