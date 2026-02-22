@@ -1,18 +1,65 @@
-<%- include("partials/head", { title: "Login - MyPunctoo", badge: "Full", topLink: {href:"/signup", label:"Account aanmaken"} }) %>
+<%- include("partials/head", {
+  title: "Login - MyPunctoo",
+  hideTopbar: true,
+  bodyClass: "auth-demo",
+  pageCss: "/public/css/auth-demo.css"
+}) %>
 
-<div class="card" style="max-width:520px">
-  <div class="h1">Login</div>
-  <div class="p">Welkom terug.</div>
-  <% if (error) { %><div class="notice" style="margin:12px 0"><%= error %></div><% } %>
+<div class="wrap auth-wrap">
+  <div class="demo-shell">
+    <div class="demo-left">
+      <h1>MyPunctoo<br/>login</h1>
+      <p class="sub">
+        Log in en ga naar je MyPunctoo back-office.
+      </p>
 
-  <form method="post" action="/login">
-    <label>E-mail</label>
-    <input name="email" type="email" value="<%= email || '' %>" required/>
-    <label>Wachtwoord</label>
-    <input name="password" type="password" required/>
-    <div class="hr"></div>
-    <button class="btn accent" type="submit">Inloggen</button>
-  </form>
+      <div class="step">Stap 1: login</div>
+
+      <% if (error) { %><div class="demo-error"><%= error %></div><% } %>
+
+      <form class="demo-form" method="post" action="/login">
+        <label>E-mail *</label>
+        <input name="email" type="email" value="<%= email || '' %>" required/>
+        <label>Wachtwoord *</label>
+        <input name="password" type="password" required/>
+        <button class="demo-btn" type="submit">Inloggen</button>
+
+        <div style="margin-top:12px;font-weight:800;">
+          <a href="/signup">Account aanmaken</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="demo-right">
+      <div class="demo-hero-card">
+        <div class="demo-hero-inner">
+          <svg class="mock" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eef2f7"/>
+    </linearGradient>
+    <linearGradient id="y" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#fdc500"/>
+      <stop offset="1" stop-color="#f4b400"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="900" height="520" rx="28" fill="url(#g)"/>
+  <rect x="70" y="85" width="290" height="350" rx="36" fill="#111"/>
+  <rect x="92" y="115" width="246" height="292" rx="26" fill="url(#y)"/>
+  <circle cx="215" cy="268" r="68" fill="#fff" opacity="0.95"/>
+  <path d="M195 268l16 18 44-58" fill="none" stroke="#111" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="215" y="160" text-anchor="middle" font-family="Poppins, Arial" font-size="18" font-weight="800" fill="#111">MyPunctoo</text>
+  <rect x="520" y="150" width="310" height="220" rx="22" fill="#fdc500"/>
+  <rect x="555" y="190" width="120" height="120" rx="10" fill="#fff" opacity="0.9"/>
+  <rect x="700" y="190" width="120" height="120" rx="10" fill="#fff" opacity="0.9"/>
+  <text x="675" y="410" text-anchor="middle" font-family="Poppins, Arial" font-size="16" font-weight="800" fill="#111">ScanTags</text>
+</svg>
+          <div class="note">Visual placeholder – vervang later door je demo-beeld</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <%- include("partials/foot") %>

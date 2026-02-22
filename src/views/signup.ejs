@@ -1,39 +1,40 @@
-<%- include("partials/head", { title: "Account aanmaken - MyPunctoo", badge: "Full", topLink: {href:"/login", label:"Ik heb al een account"} }) %>
+<%- include("partials/head", {
+  title: "Account aanmaken - MyPunctoo",
+  hideTopbar: true,
+  bodyClass: "auth-demo",
+  pageCss: "/public/css/auth-demo.css"
+}) %>
 
-<div class="card">
-  <div class="h1">Account aanmaken</div>
-  <div class="p">Vul je bedrijfsgegevens en leveringsadres in.</div>
+<div class="wrap auth-wrap">
+  <div class="demo-shell">
+    <div class="demo-left">
+      <h1>MyPunctoo<br/>starten</h1>
+      <p class="sub">
+        Maak je account aan en vul je bedrijfsgegevens in (incl. BTW) + leveringsadres.
+        Na registratie kom je meteen in de MyPunctoo zone.
+      </p>
 
-  <% if (error) { %><div class="notice" style="margin:12px 0"><%= error %></div><% } %>
+      <div class="step">Stap 1: account</div>
 
-  <form method="post" action="/signup">
-    <div class="grid">
-      <div>
-        <div class="h2">Login</div>
+      <% if (error) { %><div class="demo-error"><%= error %></div><% } %>
+
+      <form class="demo-form" method="post" action="/signup">
         <label>E-mail *</label>
         <input name="email" type="email" value="<%= values.email || '' %>" required/>
+
         <label>Wachtwoord * (min. 8 tekens)</label>
         <input name="password" type="password" required/>
-      </div>
 
-      <div>
-        <div class="h2">Bedrijf</div>
         <label>Bedrijfsnaam *</label>
         <input name="company_name" value="<%= values.company_name || '' %>" required/>
+
         <label>BTW-nummer *</label>
         <input name="vat_number" value="<%= values.vat_number || '' %>" required/>
-      </div>
-    </div>
 
-    <div class="hr"></div>
+        <label>Bedrijfsadres *</label>
+        <input name="company_address_line1" value="<%= values.company_address_line1 || '' %>" placeholder="Straat + nr" required/>
+        <input name="company_address_line2" value="<%= values.company_address_line2 || '' %>" placeholder="Bus, verdieping, ... (optioneel)"/>
 
-    <div class="grid">
-      <div>
-        <div class="h2">Bedrijfsadres</div>
-        <label>Adreslijn 1 *</label>
-        <input name="company_address_line1" value="<%= values.company_address_line1 || '' %>" required/>
-        <label>Adreslijn 2</label>
-        <input name="company_address_line2" value="<%= values.company_address_line2 || '' %>"/>
         <div class="row">
           <div>
             <label>Postcode *</label>
@@ -44,18 +45,16 @@
             <input name="company_city" value="<%= values.company_city || '' %>" required/>
           </div>
         </div>
+
         <label>Land *</label>
         <input name="company_country" value="<%= values.company_country || 'BE' %>" required/>
-      </div>
 
-      <div>
-        <div class="h2">Leveringsadres</div>
-        <label>Naam (t.a.v.) *</label>
-        <input name="delivery_name" value="<%= values.delivery_name || '' %>" required/>
-        <label>Adreslijn 1 *</label>
-        <input name="delivery_address_line1" value="<%= values.delivery_address_line1 || '' %>" required/>
-        <label>Adreslijn 2</label>
-        <input name="delivery_address_line2" value="<%= values.delivery_address_line2 || '' %>"/>
+        <div style="height:12px"></div>
+        <label>Leveringsadres (opnieuw) *</label>
+        <input name="delivery_name" value="<%= values.delivery_name || '' %>" placeholder="T.a.v." required/>
+        <input name="delivery_address_line1" value="<%= values.delivery_address_line1 || '' %>" placeholder="Straat + nr" required/>
+        <input name="delivery_address_line2" value="<%= values.delivery_address_line2 || '' %>" placeholder="Bus, verdieping, ... (optioneel)"/>
+
         <div class="row">
           <div>
             <label>Postcode *</label>
@@ -66,16 +65,47 @@
             <input name="delivery_city" value="<%= values.delivery_city || '' %>" required/>
           </div>
         </div>
+
         <label>Land *</label>
         <input name="delivery_country" value="<%= values.delivery_country || 'BE' %>" required/>
-      </div>
+
+        <button class="demo-btn" type="submit">Account aanmaken</button>
+        <div style="margin-top:12px;font-weight:800;">
+          <a href="/login">Ik heb al een account</a>
+        </div>
+      </form>
     </div>
 
-    <div class="hr"></div>
-
-    <button class="btn accent" type="submit">Account aanmaken</button>
-    <div class="small" style="margin-top:10px">Na registratie kom je in MyPunctoo.</div>
-  </form>
+    <div class="demo-right">
+      <div class="demo-hero-card">
+        <div class="demo-hero-inner">
+          <svg class="mock" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eef2f7"/>
+    </linearGradient>
+    <linearGradient id="y" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#fdc500"/>
+      <stop offset="1" stop-color="#f4b400"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="900" height="520" rx="28" fill="url(#g)"/>
+  <rect x="70" y="85" width="290" height="350" rx="36" fill="#111"/>
+  <rect x="92" y="115" width="246" height="292" rx="26" fill="url(#y)"/>
+  <circle cx="215" cy="268" r="68" fill="#fff" opacity="0.95"/>
+  <path d="M195 268l16 18 44-58" fill="none" stroke="#111" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="215" y="160" text-anchor="middle" font-family="Poppins, Arial" font-size="18" font-weight="800" fill="#111">MyPunctoo</text>
+  <rect x="520" y="150" width="310" height="220" rx="22" fill="#fdc500"/>
+  <rect x="555" y="190" width="120" height="120" rx="10" fill="#fff" opacity="0.9"/>
+  <rect x="700" y="190" width="120" height="120" rx="10" fill="#fff" opacity="0.9"/>
+  <text x="675" y="410" text-anchor="middle" font-family="Poppins, Arial" font-size="16" font-weight="800" fill="#111">ScanTags</text>
+</svg>
+          <div class="note">Visual placeholder – vervang later door je demo-beeld</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <%- include("partials/foot") %>

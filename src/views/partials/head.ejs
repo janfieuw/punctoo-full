@@ -8,25 +8,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/public/css/app.css"/>
+  <% if (typeof pageCss !== "undefined" && pageCss) { %>
+    <link rel="stylesheet" href="<%= pageCss %>"/>
+  <% } %>
 </head>
-<body>
+<body class="<%= (typeof bodyClass !== "undefined" && bodyClass) ? bodyClass : "" %>">
 <div class="wrap">
-  <div class="topbar">
-    <div class="brand">
-      <div style="width:12px;height:12px;border-radius:3px;background:var(--accent)"></div>
-      <div>MyPunctoo</div>
-      <% if (typeof badge !== "undefined" && badge) { %>
-        <div class="badge"><%= badge %></div>
-      <% } %>
+  <% if (!(typeof hideTopbar !== "undefined" && hideTopbar)) { %>
+    <div class="topbar">
+      <div class="brand">
+        <div style="width:12px;height:12px;border-radius:3px;background:var(--accent)"></div>
+        <div>MyPunctoo</div>
+        <% if (typeof badge !== "undefined" && badge) { %>
+          <div class="badge"><%= badge %></div>
+        <% } %>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <% if (typeof topLink !== "undefined" && topLink) { %>
+          <a class="btn ghost" href="<%= topLink.href %>"><%= topLink.label %></a>
+        <% } %>
+        <% if (typeof logoutForm !== "undefined" && logoutForm) { %>
+          <form method="post" action="<%= logoutForm.action %>" style="margin:0">
+            <button class="btn">Uitloggen</button>
+          </form>
+        <% } %>
+      </div>
     </div>
-    <div style="display:flex;gap:10px;align-items:center;">
-      <% if (typeof topLink !== "undefined" && topLink) { %>
-        <a class="btn ghost" href="<%= topLink.href %>"><%= topLink.label %></a>
-      <% } %>
-      <% if (typeof logoutForm !== "undefined" && logoutForm) { %>
-        <form method="post" action="<%= logoutForm.action %>" style="margin:0">
-          <button class="btn">Uitloggen</button>
-        </form>
-      <% } %>
-    </div>
-  </div>
+  <% } %>
