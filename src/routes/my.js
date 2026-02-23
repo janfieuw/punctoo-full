@@ -8,7 +8,8 @@ const { makeTagPdf } = require("../services/tagPdf");
 const router = express.Router();
 router.use(attachUser);
 
-router.get("/my", requireAuth, requireCompany, async (req, res) => {
+// ✅ Dashboard
+router.get("/app", requireAuth, requireCompany, async (req, res) => {
   const company = req.company;
 
   const employees = await db.query(
@@ -16,6 +17,7 @@ router.get("/my", requireAuth, requireCompany, async (req, res) => {
      FROM employees WHERE company_id = $1 ORDER BY created_at DESC`,
     [company.id]
   );
+
   const tags = await db.query(
     `SELECT id, tag_name, tag_code, created_at
      FROM scantags WHERE company_id = $1 ORDER BY created_at DESC`,
@@ -23,7 +25,7 @@ router.get("/my", requireAuth, requireCompany, async (req, res) => {
   );
 
   const orderOk = String(req.query.order || "") === "ok";
-  const subscriptionStart = new Date(company.subscription_start_date).toISOString().slice(0,10);
+  const subscriptionStart = new Date(company.subscription_start_date).toISOString().slice(0, 10);
 
   return res.render("my/home", {
     company,
@@ -34,7 +36,8 @@ router.get("/my", requireAuth, requireCompany, async (req, res) => {
   });
 });
 
-router.get("/my/employees", requireAuth, requireCompany, async (req, res) => {
+// ✅ Werknemers
+router.get("/app/employees", requireAuth, requireCompany, async (req, res) => {
   const employees = await db.query(
     `SELECT id, employee_name, pairing_code, created_at
      FROM employees WHERE company_id = $1 ORDER BY created_at DESC`,
@@ -43,7 +46,7 @@ router.get("/my/employees", requireAuth, requireCompany, async (req, res) => {
   return res.render("my/employees", { company: req.company, employees: employees.rows, error: null });
 });
 
-router.post("/my/employees", requireAuth, requireCompany, async (req, res) => {
+router.post("/app/employees", requireAuth, requireCompany, async (req, res) => {
   const name = safeTrim(req.body.employee_name);
   if (!name) {
     const employees = await db.query(
@@ -66,22 +69,23 @@ router.post("/my/employees", requireAuth, requireCompany, async (req, res) => {
     [uuidv4(), req.company.id, name, code]
   );
 
-  return res.redirect("/my/employees");
+  return res.redirect("/app/employees");
 });
 
-router.post("/my/employees/:id/update-name", requireAuth, requireCompany, async (req, res) => {
+router.post("/app/employees/:id/update-name", requireAuth, requireCompany, async (req, res) => {
   const id = req.params.id;
   const name = safeTrim(req.body.employee_name);
-  if (!name) return res.redirect("/my/employees");
+  if (!name) return res.redirect("/app/employees");
 
   await db.query(
     `UPDATE employees SET employee_name=$3 WHERE id=$1 AND company_id=$2`,
     [id, req.company.id, name]
   );
-  return res.redirect("/my/employees");
+  return res.redirect("/app/employees");
 });
 
-router.get("/my/tags", requireAuth, requireCompany, async (req, res) => {
+// ✅ ScanTags
+router.get("/app/tags", requireAuth, requireCompany, async (req, res) => {
   const tags = await db.query(
     `SELECT id, tag_name, tag_code, created_at
      FROM scantags WHERE company_id = $1 ORDER BY created_at DESC`,
@@ -90,10 +94,13 @@ router.get("/my/tags", requireAuth, requireCompany, async (req, res) => {
   return res.render("my/tags", { company: req.company, tags: tags.rows, error: null });
 });
 
-router.post("/my/tags", requireAuth, requireCompany, async (req, res) => {
+router.post("/app/tags", requireAuth, requireCompany, async (req, res) => {
   const name = safeTrim(req.body.tag_name);
   if (!name) {
-    const tags = await db.query(`SELECT id, tag_name, tag_code, created_at FROM scantags WHERE company_id=$1 ORDER BY created_at DESC`, [req.company.id]);
+    const tags = await db.query(
+      `SELECT id, tag_name, tag_code, created_at FROM scantags WHERE company_id=$1 ORDER BY created_at DESC`,
+      [req.company.id]
+    );
     return res.status(400).render("my/tags", { company: req.company, tags: tags.rows, error: "Geef een naam in." });
   }
 
@@ -109,10 +116,10 @@ router.post("/my/tags", requireAuth, requireCompany, async (req, res) => {
     [uuidv4(), req.company.id, name, code]
   );
 
-  return res.redirect("/my/tags");
+  return res.redirect("/app/tags");
 });
 
-router.get("/my/tags/:id/pdf", requireAuth, requireCompany, async (req, res) => {
+router.get("/app/tags/:id/pdf", requireAuth, requireCompany, async (req, res) => {
   const r = await db.query(
     `SELECT id, tag_name, tag_code FROM scantags WHERE id=$1 AND company_id=$2`,
     [req.params.id, req.company.id]
@@ -132,11 +139,12 @@ router.get("/my/tags/:id/pdf", requireAuth, requireCompany, async (req, res) => 
   return res.send(pdf);
 });
 
-router.get("/my/order-scantag", requireAuth, requireCompany, (req, res) => {
+// ✅ Extra ScanTag bestellen
+router.get("/app/order-scantag", requireAuth, requireCompany, (req, res) => {
   return res.render("my/order_scantag", { company: req.company, error: null, values: {} });
 });
 
-router.post("/my/order-scantag", requireAuth, requireCompany, async (req, res) => {
+router.post("/app/order-scantag", requireAuth, requireCompany, async (req, res) => {
   const values = req.body || {};
   const missing = requireFields(values, [
     "delivery_name",
@@ -146,9 +154,11 @@ router.post("/my/order-scantag", requireAuth, requireCompany, async (req, res) =
     "delivery_country",
     "quantity",
   ]);
+
   if (missing.length) {
     return res.status(400).render("my/order_scantag", { company: req.company, error: "Vul alle verplichte velden in.", values });
   }
+
   const qty = Number(values.quantity || "1");
   if (!Number.isFinite(qty) || qty < 1) {
     return res.status(400).render("my/order_scantag", { company: req.company, error: "Ongeldige hoeveelheid.", values });
@@ -175,7 +185,7 @@ router.post("/my/order-scantag", requireAuth, requireCompany, async (req, res) =
   // flag admin dashboard
   await db.query(`UPDATE companies SET admin_seen=FALSE WHERE id=$1`, [req.company.id]);
 
-  return res.redirect("/my?order=ok");
+  return res.redirect("/app?order=ok");
 });
 
 module.exports = router;

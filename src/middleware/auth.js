@@ -1,40 +1,128 @@
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const { v4: uuidv4 } = require("uuid");
 const db = require("../db");
+const { attachUser } = require("../middleware/auth");
+const { safeTrim, requireFields } = require("../services/helpers");
 
-async function attachUser(req, res, next) {
-  if (!req.session || !req.session.userId) return next();
-  const r = await db.query(
-    `SELECT u.id, u.email, u.company_id, c.company_name, c.customer_number, c.subscription_start_date, c.vat_number
-     FROM users u JOIN companies c ON c.id=u.company_id
-     WHERE u.id=$1`,
-    [req.session.userId]
-  );
-  if (r.rowCount) {
-    req.user = { id: r.rows[0].id, email: r.rows[0].email, company_id: r.rows[0].company_id };
-    req.company = {
-      id: r.rows[0].company_id,
-      company_name: r.rows[0].company_name,
-      customer_number: r.rows[0].customer_number,
-      subscription_start_date: r.rows[0].subscription_start_date,
-      vat_number: r.rows[0].vat_number,
-    };
+const router = express.Router();
+router.use(attachUser);
+
+// ✅ FULL: Signup
+router.get("/signup", (req, res) => {
+  if (req.user) return res.redirect("/app");
+  res.render("signup", { error: null, values: {} });
+});
+
+router.post("/signup", async (req, res) => {
+  const values = req.body || {};
+  const missing = requireFields(values, [
+    "email",
+    "password",
+    "company_name",
+    "vat_number",
+    "company_address_line1",
+    "company_postcode",
+    "company_city",
+    "company_country",
+    "delivery_name",
+    "delivery_address_line1",
+    "delivery_postcode",
+    "delivery_city",
+    "delivery_country",
+  ]);
+
+  if (missing.length) {
+    return res.status(400).render("signup", { error: "Vul alle verplichte velden in.", values });
   }
-  return next();
-}
 
-function requireAuth(req, res, next) {
-  if (req.user) return next();
-  return res.redirect("/login");
-}
+  const email = safeTrim(values.email).toLowerCase();
+  const password = safeTrim(values.password);
 
-function requireCompany(req, res, next) {
-  if (req.company) return next();
-  return res.redirect("/login");
-}
+  if (password.length < 8) {
+    return res.status(400).render("signup", { error: "Wachtwoord moet minstens 8 tekens zijn.", values });
+  }
 
-// Admin session is separate
-function requireAdmin(req, res, next) {
-  if (req.session && req.session.isAdmin) return next();
-  return res.redirect("/admin/login");
-}
+  const exists = await db.query(`SELECT 1 FROM users WHERE email=$1`, [email]);
+  if (exists.rowCount) {
+    return res.status(400).render("signup", { error: "Dit e-mailadres bestaat al.", values });
+  }
 
-module.exports = { attachUser, requireAuth, requireCompany, requireAdmin };
+  // customer_number: max + 1
+  const max = await db.query(`SELECT COALESCE(MAX(customer_number), 1000) AS m FROM companies`);
+  const nextCustomerNumber = Number(max.rows[0].m) + 1;
+
+  const companyId = uuidv4();
+  const userId = uuidv4();
+  const password_hash = await bcrypt.hash(password, 10);
+
+  const today = new Date().toISOString().slice(0, 10);
+
+  await db.query(
+    `INSERT INTO companies (
+      id, company_name, vat_number, company_address_line1, company_address_line2, company_postcode, company_city, company_country,
+      delivery_name, delivery_address_line1, delivery_address_line2, delivery_postcode, delivery_city, delivery_country,
+      customer_number, subscription_start_date, admin_seen
+    ) VALUES (
+      $1,$2,$3,$4,$5,$6,$7,$8,
+      $9,$10,$11,$12,$13,$14,
+      $15,$16,FALSE
+    )`,
+    [
+      companyId,
+      safeTrim(values.company_name),
+      safeTrim(values.vat_number),
+      safeTrim(values.company_address_line1),
+      safeTrim(values.company_address_line2),
+      safeTrim(values.company_postcode),
+      safeTrim(values.company_city),
+      safeTrim(values.company_country),
+      safeTrim(values.delivery_name),
+      safeTrim(values.delivery_address_line1),
+      safeTrim(values.delivery_address_line2),
+      safeTrim(values.delivery_postcode),
+      safeTrim(values.delivery_city),
+      safeTrim(values.delivery_country),
+      nextCustomerNumber,
+      today,
+    ]
+  );
+
+  await db.query(
+    `INSERT INTO users (id, company_id, email, password_hash) VALUES ($1,$2,$3,$4)`,
+    [userId, companyId, email, password_hash]
+  );
+
+  // Mark as unseen for admin dashboard
+  await db.query(`UPDATE companies SET admin_seen=FALSE WHERE id=$1`, [companyId]);
+
+  req.session.userId = userId;
+  return res.redirect("/app");
+});
+
+// ✅ FULL: Login
+router.get("/login", (req, res) => {
+  if (req.user) return res.redirect("/app");
+  res.render("login", { error: null, email: "" });
+});
+
+router.post("/login", async (req, res) => {
+  const email = safeTrim(req.body.email).toLowerCase();
+  const password = safeTrim(req.body.password);
+
+  const r = await db.query(`SELECT id, password_hash FROM users WHERE email=$1`, [email]);
+  if (!r.rowCount) return res.status(400).render("login", { error: "Ongeldige login.", email });
+
+  const ok = await bcrypt.compare(password, r.rows[0].password_hash);
+  if (!ok) return res.status(400).render("login", { error: "Ongeldige login.", email });
+
+  req.session.userId = r.rows[0].id;
+  return res.redirect("/app");
+});
+
+// ✅ Logout
+router.post("/logout", (req, res) => {
+  req.session.destroy(() => res.redirect("/login"));
+});
+
+module.exports = router;
