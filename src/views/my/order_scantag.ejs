@@ -5,7 +5,7 @@
 
     ${error ? `<div class="notice" style="margin:12px 0">${error}</div>` : ``}
 
-    <form method="post" action="/my/order-scantag">
+    <form method="post" action="/app/order-scantag">
       <label>Naam (t.a.v.) *</label>
       <input name="delivery_name" value="${values.delivery_name || ""}" required/>
 
@@ -38,7 +38,7 @@
   </div>
 ` %>
 
-<%- include("_layout", {
+<%- include("../_layout", {
   title: "Extra ScanTag bestellen - MyPunctoo",
   badge: company.company_name,
   topLink: { href: "/my", label: "Terug" },

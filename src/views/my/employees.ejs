@@ -5,7 +5,7 @@
 
     ${error ? `<div class="notice" style="margin:12px 0">${error}</div>` : ``}
 
-    <form method="post" action="/my/employees" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+    <form method="post" action="/app/employees" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
       <div style="flex:1;min-width:240px">
         <label>Nieuwe werknemer</label>
         <input name="employee_name" placeholder="Naam werknemer"/>
@@ -29,7 +29,7 @@
             <td>${e.employee_name}</td>
             <td style="font-weight:900">${e.pairing_code}</td>
             <td>
-              <form method="post" action="/my/employees/${e.id}/update-name" style="display:flex;gap:8px;align-items:center;margin:0">
+              <form method="post" action="/app/employees/${e.id}/update-name" style="display:flex;gap:8px;align-items:center;margin:0">
                 <input name="employee_name" value="${e.employee_name}"/>
                 <button class="btn" type="submit">Opslaan</button>
               </form>
@@ -41,7 +41,7 @@
   </div>
 ` %>
 
-<%- include("_layout", {
+<%- include("../_layout", {
   title: "Werknemers - MyPunctoo",
   badge: company.company_name,
   topLink: { href: "/my", label: "Terug" },

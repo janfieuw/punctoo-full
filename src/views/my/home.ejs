@@ -13,15 +13,15 @@
       <div>
         <div class="h2">Werknemers</div>
         <div class="p">Onbeperkt. Koppelcode blijft zichtbaar.</div>
-        <a class="btn" href="/my/employees">Open werknemersbeheer</a>
+        <a class="btn" href="/app/employees">Open werknemersbeheer</a>
         <div class="small" style="margin-top:10px">Aantal: ${employees.length}</div>
       </div>
       <div>
         <div class="h2">ScanTags</div>
         <div class="p">Altijd downloadbaar als PDF.</div>
-        <a class="btn" href="/my/tags">Open tagbeheer</a>
+        <a class="btn" href="/app/tags">Open tagbeheer</a>
         <div style="margin-top:12px">
-          <a class="btn accent" style="width:100%" href="/my/order-scantag">Extra ScanTag bestellen</a>
+          <a class="btn accent" style="width:100%" href="/app/order-scantag">Extra ScanTag bestellen</a>
         </div>
         <div class="small" style="margin-top:10px">Aantal: ${tags.length}</div>
       </div>
@@ -31,7 +31,7 @@
   </div>
 ` %>
 
-<%- include("_layout", {
+<%- include("../_layout", {
   title: "MyPunctoo",
   badge: company.company_name,
   logoutAction: "/logout",

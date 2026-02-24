@@ -5,7 +5,7 @@
 
     ${error ? `<div class="notice" style="margin:12px 0">${error}</div>` : ``}
 
-    <form method="post" action="/my/tags" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+    <form method="post" action="/app/tags" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
       <div style="flex:1;min-width:240px">
         <label>Nieuwe ScanTag</label>
         <input name="tag_name" placeholder="Bijv. Ingang magazijn"/>
@@ -28,18 +28,18 @@
           <tr>
             <td>${t.tag_name}</td>
             <td style="font-weight:900">${t.tag_code}</td>
-            <td><a class="btn" href="/my/tags/${t.id}/pdf">PDF</a></td>
+            <td><a class="btn" href="/app/tags/${t.id}/pdf">PDF</a></td>
           </tr>
         `).join("")}
       </tbody>
     </table>
 
     <div class="hr"></div>
-    <a class="btn accent" href="/my/order-scantag">Extra ScanTag bestellen</a>
+    <a class="btn accent" href="/app/order-scantag">Extra ScanTag bestellen</a>
   </div>
 ` %>
 
-<%- include("_layout", {
+<%- include("../_layout", {
   title: "ScanTags - MyPunctoo",
   badge: company.company_name,
   topLink: { href: "/my", label: "Terug" },
