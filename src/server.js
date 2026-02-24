@@ -37,7 +37,7 @@ app.use(
   session({
     store: new pgSession({
       pool: db,
-      tableName: "user_sessions",
+      tableName: "sessions",
     }),
     secret: process.env.SESSION_SECRET || "dev-secret",
     resave: false,
