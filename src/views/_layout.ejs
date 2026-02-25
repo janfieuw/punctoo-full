@@ -1,17 +1,24 @@
-<%- include("partials/head", { title }) %>
+<%
+  const _title = (typeof title !== "undefined") ? title : undefined;
+  const _bodyClass = (typeof bodyClass !== "undefined") ? bodyClass : undefined;
+  const _badge = (typeof badge !== "undefined") ? badge : null;
+  const _topLink = (typeof topLink !== "undefined") ? topLink : null;
+  const _logoutAction = (typeof logoutAction !== "undefined") ? logoutAction : null;
+%>
+<%- include("partials/head", { title: _title, bodyClass: _bodyClass }) %>
 
 <div class="topbar">
   <div class="left">
     <span class="dot"></span>
     <span>MyPunctoo</span>
-    <% if (badge) { %><span class="pill"><%= badge %></span><% } %>
+    <% if (_badge) { %><span class="pill"><%= _badge %></span><% } %>
   </div>
   <div>
-    <% if (topLink) { %>
-      <a class="btn ghost" href="<%= topLink.href %>"><%= topLink.label %></a>
+    <% if (_topLink) { %>
+      <a class="btn ghost" href="<%= _topLink.href %>"><%= _topLink.label %></a>
     <% } %>
-    <% if (logoutAction) { %>
-      <form method="post" action="<%= logoutAction %>" style="display:inline;margin-left:10px">
+    <% if (_logoutAction) { %>
+      <form method="post" action="<%= _logoutAction %>" style="display:inline;margin-left:10px">
         <button class="btn ghost" type="submit">Uitloggen</button>
       </form>
     <% } %>

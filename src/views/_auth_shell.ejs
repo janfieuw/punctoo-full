@@ -1,4 +1,9 @@
-<%- include("partials/head", { title, bodyClass: "demo-body" }) %>
+<%
+  const _title = (typeof title !== "undefined") ? title : undefined;
+  const _stepTitle = (typeof stepTitle !== "undefined") ? stepTitle : "";
+  const _bodyClass = (typeof bodyClass !== "undefined") ? bodyClass : "demo-body";
+%>
+<%- include("partials/head", { title: _title, bodyClass: _bodyClass }) %>
 
 <div class="demo-shell">
   <div class="demo-left">
@@ -8,7 +13,7 @@
         Doorloop de wizard van 5 stappen. Na afloop ben je meteen klaar om te gaan testen.
       </div>
 
-      <div class="demo-step-title"><%= stepTitle %></div>
+      <div class="demo-step-title"><%= _stepTitle %></div>
 
       <div class="demo-form-wrap">
         <%- body %>
