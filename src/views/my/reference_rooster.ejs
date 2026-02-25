@@ -1,0 +1,52 @@
+<% const body = `
+  <div class="card">
+    <div class="h1">Rooster</div>
+    <div class="p">Werknemer: <b>${employee.employee_name}</b>. Stel een weekpatroon in. Pauze (min) wordt later meegenomen in rapporten.</div>
+
+    ${ok ? `<div class="notice" style="margin:12px 0">Opgeslagen.</div>` : ``}
+    ${error ? `<div class="notice" style="margin:12px 0">${error}</div>` : ``}
+
+    <form method="post" action="/app/employees/${employee.id}/reference/rooster" style="margin-top:12px">
+      <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px">
+        <div style="min-width:220px">
+          <div class="label">Actief vanaf</div>
+          <input type="date" name="effectiveFrom" value="${effectiveFrom}" />
+        </div>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Dag</th>
+            <th>Start</th>
+            <th>Einde</th>
+            <th>Pauze (min)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${days.map(d => `
+            <tr>
+              <td>${d.label}</td>
+              <td><input type="time" name="start_${d.weekday}" value="${d.start_time || ""}"></td>
+              <td><input type="time" name="end_${d.weekday}" value="${d.end_time || ""}"></td>
+              <td><input type="number" min="0" name="break_${d.weekday}" value="${d.break_minutes ?? 0}"></td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn" type="submit">Opslaan</button>
+        <a class="btn ghost" href="/app/employees/${employee.id}/reference">Terug</a>
+      </div>
+    </form>
+  </div>
+` %>
+
+<%- include("../_layout", {
+  title: "Rooster - MyPunctoo",
+  badge: company.company_name,
+  topLink: { href: "/app/employees/" + employee.id + "/reference", label: "Terug" },
+  logoutAction: "/logout",
+  body
+}) %>

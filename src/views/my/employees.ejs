@@ -21,7 +21,8 @@
           <th>Naam</th>
           <th>Koppelcode</th>
           <th>Wijzigen</th>
-        </tr>
+                    <th>Referentietijden</th>
+          </tr>
       </thead>
       <tbody>
         ${employees.map(e => `
@@ -34,6 +35,9 @@
                 <button class="btn" type="submit">Opslaan</button>
               </form>
             </td>
+            <td>
+              <a class="btn ghost" href="/app/employees/${e.id}/reference">Referentietijden</a>
+            </td>
           </tr>
         `).join("")}
       </tbody>
@@ -44,7 +48,7 @@
 <%- include("../_layout", {
   title: "Werknemers - MyPunctoo",
   badge: company.company_name,
-  topLink: { href: "/my", label: "Terug" },
+  topLink: { href: "/app", label: "Terug" },
   logoutAction: "/logout",
   body
 }) %>
