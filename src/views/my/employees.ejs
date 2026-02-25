@@ -1,54 +1,52 @@
-<% const body = `
-  <div class="card">
-    <div class="h1">Werknemers</div>
-    <div class="p">Onbeperkt. Per werknemer blijft de koppelcode zichtbaar.</div>
-
-    ${error ? `<div class="notice" style="margin:12px 0">${error}</div>` : ``}
-
-    <form method="post" action="/app/employees" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
-      <div style="flex:1;min-width:240px">
-        <label>Nieuwe werknemer</label>
-        <input name="employee_name" placeholder="Naam werknemer"/>
-      </div>
-      <button class="btn accent" type="submit">Toevoegen</button>
-    </form>
-
-    <div class="hr"></div>
-
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Naam</th>
-          <th>Koppelcode</th>
-          <th>Wijzigen</th>
-                    <th>Referentietijden</th>
-          </tr>
-      </thead>
-      <tbody>
-        ${employees.map(e => `
-          <tr>
-            <td>${e.employee_name}</td>
-            <td style="font-weight:900">${e.pairing_code}</td>
-            <td>
-              <form method="post" action="/app/employees/${e.id}/update-name" style="display:flex;gap:8px;align-items:center;margin:0">
-                <input name="employee_name" value="${e.employee_name}"/>
-                <button class="btn" type="submit">Opslaan</button>
-              </form>
-            </td>
-            <td>
-              <a class="btn ghost" href="/app/employees/${e.id}/reference">Referentietijden</a>
-            </td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  </div>
-` %>
-
-<%- include("../_layout", {
-  title: "Werknemers - MyPunctoo",
-  badge: company.company_name,
-  topLink: { href: "/app", label: "Terug" },
+<%- include("../_layout", { 
+  title: "Werknemers", 
+  badge: company.company_name, 
   logoutAction: "/logout",
-  body
+  topLink: { href: "/app", label: "Terug" }
 }) %>
+
+<div class="card">
+  <h2>Werknemers</h2>
+  <p>Onbeperkt. Per werknemer blijft de koppelcode zichtbaar.</p>
+
+  <!-- Nieuwe werknemer -->
+  <form method="post" action="/app/employees/add" style="display:flex; gap:12px; align-items:center; margin-bottom:20px;">
+    <label>Nieuwe werknemer</label>
+    <input type="text" name="name" placeholder="Naam werknemer" required />
+    <button class="btn" type="submit">Toevoegen</button>
+  </form>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Naam</th>
+        <th>Koppelcode</th>
+        <th>Wijzigen</th>
+        <th style="text-align:right;">Referentietijden</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% employees.forEach(e => { %>
+        <tr>
+          <td><%= e.employee_name %></td>
+
+          <td><b><%= e.pairing_code %></b></td>
+
+          <td>
+            <form method="post" action="/app/employees/<%= e.id %>/update-name" style="display:flex; gap:8px;">
+              <input type="text" name="name" value="<%= e.employee_name %>" required />
+              <button class="btn ghost" type="submit">Opslaan</button>
+            </form>
+          </td>
+
+          <td style="text-align:right;">
+            <a class="btn ghost" href="/app/employees/<%= e.id %>/reference">
+              Open
+            </a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
