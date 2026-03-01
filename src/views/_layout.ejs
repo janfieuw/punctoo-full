@@ -1,28 +1,72 @@
-<%- include("partials/head", { 
-  title: title || "MyPunctoo",
-  bodyClass: bodyClass || ""
-}) %>
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title || "Punctoo" %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/app.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="page">
+    <% if (typeof chrome !== 'undefined' && chrome) { %>
+      <header class="top">
+        <div class="bar primary">
+          <div class="left">
+            <div class="brand">
+              <span class="brand-dot"></span>
+              <span class="brand-name">punctoo</span>
+            </div>
+            <% if (badge) { %>
+              <div class="badge"><%= badge %></div>
+            <% } %>
+          </div>
 
-<div class="topbar">
-  <div class="left">
-    <span class="logo-dot"></span>
-    <strong>MyPunctoo</strong>
-    <% if (badge) { %>
-      <span class="badge"><%= badge %></span>
+          <div class="right">
+            <% if (typeof topMeta !== 'undefined' && topMeta) { %>
+              <div class="meta"><%= topMeta %></div>
+            <% } %>
+
+            <% if (logoutAction) { %>
+              <form method="post" action="<%= logoutAction %>">
+                <button class="btn btn-ghost" type="submit">
+                  <i data-lucide="log-out"></i> Uitloggen
+                </button>
+              </form>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="bar secondary">
+          <nav class="tabs">
+            <% (tabs || []).forEach(t => { %>
+              <a class="tab <%= t.active ? "active" : "" %>" href="<%= t.href %>"><%= t.label %></a>
+            <% }) %>
+          </nav>
+        </div>
+
+        <% if (subtabs && subtabs.length) { %>
+          <div class="bar tertiary">
+            <nav class="tabs small">
+              <% subtabs.forEach(t => { %>
+                <a class="tab <%= t.active ? "active" : "" %>" href="<%= t.href %>"><%= t.label %></a>
+              <% }) %>
+            </nav>
+          </div>
+        <% } %>
+      </header>
     <% } %>
+
+    <main class="content">
+      <%- body %>
+    </main>
   </div>
 
-  <div class="right">
-    <% if (topLink) { %>
-      <a class="btn ghost" href="<%= topLink.href %>"><%= topLink.label %></a>
-    <% } %>
-
-    <% if (logoutAction) { %>
-      <form method="post" action="<%= logoutAction %>" style="display:inline;">
-        <button type="submit" class="btn ghost">Uitloggen</button>
-      </form>
-    <% } %>
-  </div>
-</div>
-
-<div class="page-wrap">
+  <script>
+    try { lucide.createIcons(); } catch(e) {}
+  </script>
+</body>
+</html>

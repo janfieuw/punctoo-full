@@ -1,0 +1,80 @@
+<%- include("../_layout", {
+  title: "Dashboard · MyPunctoo",
+  chrome: true,
+  badge: user.company_name,
+  logoutAction: "/logout",
+  tabs: [
+    {href:"/app", label:"DASHBOARD", active:true},
+    {href:"/app/employees", label:"WERKNEMERS", active:false},
+    {href:"/app/reference", label:"REFERENTIE", active:false},
+    {href:"/app/export", label:"EXPORT", active:false}
+  ],
+  topMeta: "Klant #" + user.company_number
+}) %>
+
+<div class="grid2">
+  <div class="card">
+    <h2>Overzicht</h2>
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kpi-label">Actieve werknemers</div>
+        <div class="kpi-value"><%= empCount %></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Referentieduur</div>
+        <div class="kpi-value"><%= ref ? ref.reference_days : "—" %> <span class="small">dagen</span></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Weekuren</div>
+        <div class="kpi-value"><%= ref ? (ref.weekly_minutes_target/60).toFixed(1) : "—" %> <span class="small">u</span></div>
+      </div>
+    </div>
+
+    <% if (balance) { %>
+      <div class="divider"></div>
+      <h3>Transparantie (laatste <%= ref.reference_days %> dagen)</h3>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">Gewerkt</div>
+          <div class="kpi-value"><%= Math.round(balance.workedMin/60*10)/10 %><span class="small">u</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Doel</div>
+          <div class="kpi-value"><%= Math.round(balance.targetMin/60*10)/10 %><span class="small">u</span></div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Saldo</div>
+          <div class="kpi-value"><%= balance.diffHHMM %></div>
+        </div>
+      </div>
+      <p class="muted tiny">Dit is een eenvoudige berekening op basis van IN→OUT paren. Geen automatische correcties.</p>
+    <% } %>
+  </div>
+
+  <div class="card">
+    <h2>Laatste scans</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tijd</th>
+          <th>Werknemer</th>
+          <th>Type</th>
+          <th>Locatie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% lastScans.forEach(r => { %>
+          <tr>
+            <td><%= new Date(r.scanned_at).toLocaleString('nl-BE') %></td>
+            <td><%= r.display_name %></td>
+            <td><span class="pill <%= r.scan_type === 'IN' ? 'in' : 'out' %>"><%= r.scan_type %></span></td>
+            <td><%= r.location_label || "—" %></td>
+          </tr>
+        <% }) %>
+        <% if (!lastScans.length) { %>
+          <tr><td colspan="4" class="muted">Nog geen scans.</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

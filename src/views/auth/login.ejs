@@ -1,0 +1,33 @@
+<%- include("../_layout", {
+  title: "Login · Punctoo",
+  chrome: true,
+  badge: "MyPunctoo",
+  logoutAction: null,
+  tabs: [{href:"/login", label:"LOGIN", active:true}]
+}) %>
+
+<div class="card narrow">
+  <h1>MyPunctoo login</h1>
+  <p class="muted">Vul je <b>klantnummer</b> en login in.</p>
+
+  <% if (error) { %><div class="alert"><%= error %></div><% } %>
+
+  <form method="post" action="/login" class="form">
+    <label>Klantnummer</label>
+    <input name="company_number" placeholder="bv. 1" required />
+
+    <label>E-mail</label>
+    <input name="email" type="email" placeholder="owner@bedrijf.be" required />
+
+    <label>Wachtwoord</label>
+    <input name="password" type="password" placeholder="••••••••" required />
+
+    <button class="btn btn-primary" type="submit">
+      <i data-lucide="log-in"></i> Inloggen
+    </button>
+  </form>
+
+  <div class="hint">
+    Demo: klantnummer = <b>1</b> · email = <b>owner@demo.be</b> · pass = <b>demo1234</b>
+  </div>
+</div>

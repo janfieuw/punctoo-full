@@ -1,13 +1,26 @@
-<% const body = `
-  ${error ? `<div class="demo-error">${error}</div>` : ``}
+<%- include("../_layout", {
+  title: "Admin login · Punctoo",
+  chrome: true,
+  badge: "Adminzone",
+  logoutAction: null,
+  tabs: [{href:"/admin/login", label:"ADMIN LOGIN", active:true}]
+}) %>
 
-  <form method="post" action="/admin/login" class="demo-form">
+<div class="card narrow">
+  <h1>Admin login</h1>
+  <p class="muted">Enkel intern gebruik.</p>
+
+  <% if (error) { %><div class="alert"><%= error %></div><% } %>
+
+  <form method="post" action="/admin/login" class="form">
     <label>E-mail</label>
-    <input name="email" type="email" value="${email || ""}" required />
+    <input name="email" type="email" required />
+
     <label>Wachtwoord</label>
     <input name="password" type="password" required />
-    <button class="demo-btn" type="submit">INLOGGEN</button>
-  </form>
-` %>
 
-<%- include("../_auth_shell", { title: "Admin login - MyPunctoo", stepTitle: "ADMIN LOGIN.", body }) %>
+    <button class="btn btn-primary" type="submit"><i data-lucide="shield-check"></i> Inloggen</button>
+  </form>
+
+  <div class="hint">Demo admin: <b>admin@punctoo.be</b> / <b>admin1234</b></div>
+</div>

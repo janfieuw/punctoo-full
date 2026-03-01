@@ -1,0 +1,48 @@
+<%- include("../_layout", {
+  title: "Admin · Punctoo",
+  chrome: true,
+  badge: "Adminzone",
+  logoutAction: "/admin/logout",
+  tabs: [{href:"/admin", label:"KLANTEN", active:true}]
+}) %>
+
+<div class="grid2">
+  <div class="card">
+    <h2>Stats</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-label">Actieve klanten</div><div class="kpi-value"><%= stats.companies_active %></div></div>
+      <div class="kpi"><div class="kpi-label">Users</div><div class="kpi-value"><%= stats.users_total %></div></div>
+      <div class="kpi"><div class="kpi-label">Actieve werknemers</div><div class="kpi-value"><%= stats.employees_active %></div></div>
+      <div class="kpi"><div class="kpi-label">Scan events</div><div class="kpi-value"><%= stats.scan_events_total %></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Laatste klanten</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Klantnr</th>
+          <th>Bedrijf</th>
+          <th>Stad</th>
+          <th>Actieve werknemers</th>
+          <th>Start</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% companies.forEach(c => { %>
+          <tr>
+            <td><span class="mono"><%= c.company_number %></span></td>
+            <td><%= c.company_name %></td>
+            <td><%= c.city || "—" %></td>
+            <td><%= c.employees_active %></td>
+            <td><%= new Date(c.created_at).toLocaleDateString('nl-BE') %></td>
+          </tr>
+        <% }) %>
+        <% if (!companies.length) { %>
+          <tr><td colspan="5" class="muted">Geen klanten.</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
