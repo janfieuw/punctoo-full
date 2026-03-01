@@ -3,16 +3,6 @@ const router = express.Router();
 const { q } = require('../db');
 const { requireUser } = require('../middleware/auth');
 
-function appTabs(active) {
-  return [
-    { href: "/app", label: "DASHBOARD", active: active === "dash" },
-    { href: "/app/employees", label: "WERKNEMERS", active: active === "emp" },
-    { href: "/app/reference", label: "REFERENTIE", active: active === "ref" },
-    { href: "/app/balance", label: "BALANS", active: active === "bal" },
-    { href: "/app/export", label: "EXPORT", active: active === "exp" }
-  ];
-}
-
 function csvEscape(v) {
   const s = (v ?? '').toString();
   if (/[",\n]/.test(s)) return '"' + s.replace(/"/g,'""') + '"';
@@ -20,21 +10,14 @@ function csvEscape(v) {
 }
 
 router.get('/app/export', requireUser, async (req, res) => {
-  res.render('app/export', {
-    title: "Export · MyPunctoo",
-    chrome: true,
-    badge: req.session.user.company_name,
-    topMeta: "Klant #" + req.session.user.company_number,
-    logoutAction: "/logout",
-    tabs: appTabs("exp"),
-    error: null
-  });
+  res.render('app/export', { error: null });
 });
 
 router.get('/app/export/events.csv', requireUser, async (req, res) => {
   const companyId = req.session.user.company_id;
   const from = (req.query.from || '').trim();
   const to = (req.query.to || '').trim();
+
   if (!from || !to) return res.redirect('/app/export');
 
   const { rows } = await q(

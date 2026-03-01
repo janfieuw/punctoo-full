@@ -13,17 +13,16 @@ const appRoutes = require('./src/routes/app.routes');
 const employeeRoutes = require('./src/routes/employees.routes');
 const referenceRoutes = require('./src/routes/reference.routes');
 const exportRoutes = require('./src/routes/export.routes');
-const balanceRoutes = require('./src/routes/balance.routes');
 const scanRoutes = require('./src/routes/scan.routes');
 const adminRoutes = require('./src/routes/admin.routes');
 
 const app = express();
 
-// Trust proxy for Railway
+// Trust proxy for Railway (req.ip)
 app.set('trust proxy', 1);
 
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: false, // EJS + lucide CDN + google fonts
 }));
 app.use(morgan('tiny'));
 app.use(express.urlencoded({ extended: true }));
@@ -52,25 +51,24 @@ app.set('view engine', 'ejs');
 // Static
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Locals
+// Make session user available in templates
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.admin = req.session.admin || null;
   next();
 });
 
+// Routes
 app.get('/', (req, res) => {
   if (req.session.user) return res.redirect('/app');
   return res.redirect('/login');
 });
 
-// Routes
 app.use(authRoutes);
 app.use(appRoutes);
 app.use(employeeRoutes);
 app.use(referenceRoutes);
 app.use(exportRoutes);
-app.use(balanceRoutes);
 app.use(scanRoutes);
 app.use(adminRoutes);
 
