@@ -61,7 +61,7 @@
     <% } %>
 
     <main class="content">
-      <%- body %>
+      <%- (typeof body !== 'undefined' ? body : '') %>
     </main>
   </div>
 
