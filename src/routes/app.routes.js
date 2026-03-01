@@ -4,6 +4,15 @@ const { q } = require('../db');
 const { requireUser } = require('../middleware/auth');
 const { minutesToHHMM } = require('../utils/time');
 
+function appTabs(active) {
+  return [
+    { href: "/app", label: "DASHBOARD", active: active === "dash" },
+    { href: "/app/employees", label: "WERKNEMERS", active: active === "emp" },
+    { href: "/app/reference", label: "REFERENTIE", active: active === "ref" },
+    { href: "/app/export", label: "EXPORT", active: active === "exp" }
+  ];
+}
+
 router.get('/app', requireUser, async (req, res) => {
   const companyId = req.session.user.company_id;
 
@@ -18,7 +27,6 @@ router.get('/app', requireUser, async (req, res) => {
      LIMIT 10`, [companyId]
   );
 
-  // Reference profile open-ended
   const ref = await q(
     `SELECT reference_days, weekly_minutes_target, effective_from
      FROM reference_profiles
@@ -27,8 +35,6 @@ router.get('/app', requireUser, async (req, res) => {
      LIMIT 1`, [companyId]
   );
 
-  // Simple "current balance" approximation:
-  // (worked minutes in last reference_days) - (weekly target * reference_days/7)
   let balance = null;
   if (ref.rows.length) {
     const { reference_days, weekly_minutes_target } = ref.rows[0];
@@ -42,19 +48,21 @@ router.get('/app', requireUser, async (req, res) => {
       )
       SELECT COALESCE(SUM(EXTRACT(EPOCH FROM (scanned_at - prev_time))/60),0)::int AS minutes
       FROM ev
-      WHERE scan_type='OUT' AND prev_type='IN' AND prev_time IS NOT NULL`, [companyId, reference_days]
+      WHERE scan_type='OUT' AND prev_type='IN' AND prev_time IS NOT NULL`,
+      [companyId, reference_days]
     );
     const workedMin = worked.rows[0].minutes || 0;
     const targetMin = Math.round(weekly_minutes_target * (reference_days / 7));
-    balance = {
-      workedMin,
-      targetMin,
-      diffMin: workedMin - targetMin,
-      diffHHMM: minutesToHHMM(workedMin - targetMin)
-    };
+    balance = { workedMin, targetMin, diffMin: workedMin - targetMin, diffHHMM: minutesToHHMM(workedMin - targetMin) };
   }
 
   res.render('app/dashboard', {
+    title: "Dashboard · MyPunctoo",
+    chrome: true,
+    badge: req.session.user.company_name,
+    topMeta: "Klant #" + req.session.user.company_number,
+    logoutAction: "/logout",
+    tabs: appTabs("dash"),
     empCount: empCount.rows[0].n,
     lastScans: lastScans.rows,
     ref: ref.rows[0] || null,

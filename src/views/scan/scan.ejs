@@ -1,12 +1,3 @@
-<%- include("../_layout", {
-  title: "Scan " + scanType + " · Punctoo",
-  chrome: true,
-  badge: tag.company_name,
-  logoutAction: null,
-  tabs: [{href:"#", label:"SCAN " + scanType, active:true}],
-  topMeta: tag.location_label ? ("Locatie: " + tag.location_label) : ""
-}) %>
-
 <div class="card narrow">
   <h1>Scan <span class="pill <%= scanType === 'IN' ? 'in' : 'out' %>"><%= scanType %></span></h1>
   <p class="muted">Vul je <b>koppelcode</b> in en bevestig.</p>

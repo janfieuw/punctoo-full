@@ -1,17 +1,3 @@
-<%- include("../_layout", {
-  title: "Werknemers · MyPunctoo",
-  chrome: true,
-  badge: user.company_name,
-  logoutAction: "/logout",
-  tabs: [
-    {href:"/app", label:"DASHBOARD", active:false},
-    {href:"/app/employees", label:"WERKNEMERS", active:true},
-    {href:"/app/reference", label:"REFERENTIE", active:false},
-    {href:"/app/export", label:"EXPORT", active:false}
-  ],
-  topMeta: "Klant #" + user.company_number
-}) %>
-
 <div class="card">
   <div class="row">
     <div>

@@ -1,17 +1,3 @@
-<%- include("../_layout", {
-  title: "Dashboard · MyPunctoo",
-  chrome: true,
-  badge: user.company_name,
-  logoutAction: "/logout",
-  tabs: [
-    {href:"/app", label:"DASHBOARD", active:true},
-    {href:"/app/employees", label:"WERKNEMERS", active:false},
-    {href:"/app/reference", label:"REFERENTIE", active:false},
-    {href:"/app/export", label:"EXPORT", active:false}
-  ],
-  topMeta: "Klant #" + user.company_number
-}) %>
-
 <div class="grid2">
   <div class="card">
     <h2>Overzicht</h2>
@@ -47,7 +33,7 @@
           <div class="kpi-value"><%= balance.diffHHMM %></div>
         </div>
       </div>
-      <p class="muted tiny">Dit is een eenvoudige berekening op basis van IN→OUT paren. Geen automatische correcties.</p>
+      <p class="muted tiny">Eenvoudige berekening op basis van IN→OUT paren. Geen automatische correcties.</p>
     <% } %>
   </div>
 

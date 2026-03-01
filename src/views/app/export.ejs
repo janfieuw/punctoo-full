@@ -1,17 +1,3 @@
-<%- include("../_layout", {
-  title: "Export · MyPunctoo",
-  chrome: true,
-  badge: user.company_name,
-  logoutAction: "/logout",
-  tabs: [
-    {href:"/app", label:"DASHBOARD", active:false},
-    {href:"/app/employees", label:"WERKNEMERS", active:false},
-    {href:"/app/reference", label:"REFERENTIE", active:false},
-    {href:"/app/export", label:"EXPORT", active:true}
-  ],
-  topMeta: "Klant #" + user.company_number
-}) %>
-
 <div class="card">
   <h2>Download scanlog</h2>
   <p class="muted">Export als CSV (geschikt voor inspectie, boekhouder, eigen analyse).</p>

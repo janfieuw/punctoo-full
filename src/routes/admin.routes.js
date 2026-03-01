@@ -4,26 +4,48 @@ const { q } = require('../db');
 const { requireAdmin } = require('../middleware/auth');
 const { verifyAdminPasswordAuto } = require('../security');
 
+function adminTabs(active) {
+  return [{ href: "/admin", label: "KLANTEN", active: active === "cust" }];
+}
+
 router.get('/admin/login', (req, res) => {
-  res.render('admin/login', { error: null });
+  res.render('admin/login', {
+    title: "Admin login · Punctoo",
+    chrome: true,
+    badge: "Adminzone",
+    tabs: [{ href: "/admin/login", label: "ADMIN LOGIN", active: true }],
+    error: null
+  });
 });
 
 router.post('/admin/login', async (req, res) => {
   const email = (req.body.email || '').trim().toLowerCase();
   const ok = await verifyAdminPasswordAuto(email, req.body.password || '');
-  if (!ok) return res.render('admin/login', { error: 'Onjuiste login.' });
+
+  if (!ok) {
+    return res.render('admin/login', {
+      title: "Admin login · Punctoo",
+      chrome: true,
+      badge: "Adminzone",
+      tabs: [{ href: "/admin/login", label: "ADMIN LOGIN", active: true }],
+      error: "Onjuiste login."
+    });
+  }
 
   const u = await q("SELECT id, email, full_name, status FROM admin_users WHERE email=$1 LIMIT 1", [email]);
-  if (!u.rows.length) return res.render('admin/login', { error: 'Onjuiste login.' });
-  if (u.rows[0].status !== 'active') return res.render('admin/login', { error: 'Account gedeactiveerd.' });
+  if (!u.rows.length || u.rows[0].status !== 'active') {
+    return res.render('admin/login', {
+      title: "Admin login · Punctoo",
+      chrome: true,
+      badge: "Adminzone",
+      tabs: [{ href: "/admin/login", label: "ADMIN LOGIN", active: true }],
+      error: "Onjuiste login."
+    });
+  }
 
   await q("UPDATE admin_users SET last_login_at=now() WHERE id=$1", [u.rows[0].id]);
 
-  req.session.admin = {
-    id: u.rows[0].id,
-    email: u.rows[0].email,
-    full_name: u.rows[0].full_name
-  };
+  req.session.admin = { id: u.rows[0].id, email: u.rows[0].email, full_name: u.rows[0].full_name };
   res.redirect('/admin');
 });
 
@@ -48,7 +70,15 @@ router.get('/admin', requireAdmin, async (req, res) => {
      LIMIT 50`
   );
 
-  res.render('admin/dashboard', { stats: stats.rows[0], companies: companies.rows });
+  res.render('admin/dashboard', {
+    title: "Admin · Punctoo",
+    chrome: true,
+    badge: "Adminzone",
+    logoutAction: "/admin/logout",
+    tabs: adminTabs("cust"),
+    stats: stats.rows[0],
+    companies: companies.rows
+  });
 });
 
 module.exports = router;

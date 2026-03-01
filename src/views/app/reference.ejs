@@ -1,17 +1,3 @@
-<%- include("../_layout", {
-  title: "Referentie · MyPunctoo",
-  chrome: true,
-  badge: user.company_name,
-  logoutAction: "/logout",
-  tabs: [
-    {href:"/app", label:"DASHBOARD", active:false},
-    {href:"/app/employees", label:"WERKNEMERS", active:false},
-    {href:"/app/reference", label:"REFERENTIE", active:true},
-    {href:"/app/export", label:"EXPORT", active:false}
-  ],
-  topMeta: "Klant #" + user.company_number
-}) %>
-
 <div class="grid2">
   <div class="card">
     <h2>Actieve instellingen</h2>
@@ -35,7 +21,7 @@
     <% } %>
 
     <div class="divider"></div>
-    <h3>Nieuwe instellingen ingeven</h3>
+    <h3>Nieuwe instellingen</h3>
     <% if (error) { %><div class="alert"><%= error %></div><% } %>
 
     <form method="post" action="/app/reference" class="form">

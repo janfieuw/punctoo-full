@@ -1,11 +1,3 @@
-<%- include("../_layout", {
-  title: "OK · Punctoo",
-  chrome: true,
-  badge: tag.company_name,
-  logoutAction: null,
-  tabs: [{href:"#", label:"SCAN OK", active:true}]
-}) %>
-
 <div class="card narrow">
   <h1>Geregistreerd ✅</h1>
   <p class="muted"><b><%= employee.display_name %></b> · <span class="pill <%= scanType === 'IN' ? 'in' : 'out' %>"><%= scanType %></span></p>
