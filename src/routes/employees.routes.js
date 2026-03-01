@@ -8,6 +8,7 @@ function appTabs(active) {
     { href: "/app", label: "DASHBOARD", active: active === "dash" },
     { href: "/app/employees", label: "WERKNEMERS", active: active === "emp" },
     { href: "/app/reference", label: "REFERENTIE", active: active === "ref" },
+    { href: "/app/balance", label: "BALANS", active: active === "bal" },
     { href: "/app/export", label: "EXPORT", active: active === "exp" }
   ];
 }
