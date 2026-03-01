@@ -20,7 +20,7 @@
               <span class="brand-dot"></span>
               <span class="brand-name">punctoo</span>
             </div>
-            <% if (badge) { %>
+            <% if (typeof badge !== 'undefined' && badge) { %>
               <div class="badge"><%= badge %></div>
             <% } %>
           </div>
@@ -30,7 +30,7 @@
               <div class="meta"><%= topMeta %></div>
             <% } %>
 
-            <% if (logoutAction) { %>
+            <% if (typeof logoutAction !== 'undefined' && logoutAction) { %>
               <form method="post" action="<%= logoutAction %>">
                 <button class="btn btn-ghost" type="submit">
                   <i data-lucide="log-out"></i> Uitloggen
@@ -48,7 +48,7 @@
           </nav>
         </div>
 
-        <% if (subtabs && subtabs.length) { %>
+        <% if (typeof subtabs !== 'undefined' && subtabs && subtabs.length) { %>
           <div class="bar tertiary">
             <nav class="tabs small">
               <% subtabs.forEach(t => { %>
