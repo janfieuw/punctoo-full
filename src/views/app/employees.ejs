@@ -1,3 +1,13 @@
+<%- include("../_layout_top", {
+  title: title,
+  chrome: chrome,
+  badge: badge,
+  topMeta: topMeta,
+  logoutAction: logoutAction,
+  tabs: tabs,
+  subtabs: subtabs
+}) %>
+
 <div class="card">
   <div class="row">
     <div>
@@ -7,19 +17,23 @@
     <div class="hint">Tip: gebruik korte numerieke codes (bv. 1234).</div>
   </div>
 
-  <% if (error) { %><div class="alert"><%= error %></div><% } %>
+  <% if (error) { %>
+    <div class="alert"><%= error %></div>
+  <% } %>
 
-  <form method="post" action="/app/employees/add" class="form inline">
+  <form method="post" action="/app/employees/add" class="form inline" style="margin-top: 12px;">
     <div class="field">
-      <label>Naam</label>
-      <input name="name" placeholder="Naam werknemer" required />
+      <label>Naam werknemer</label>
+      <input type="text" name="name" placeholder="Naam" required />
     </div>
     <div class="field">
       <label>Koppelcode</label>
-      <input name="coupling_code" placeholder="bv. 1234" required />
+      <input type="text" name="coupling_code" placeholder="1234" required />
     </div>
     <button class="btn btn-primary" type="submit"><i data-lucide="plus"></i> Toevoegen</button>
   </form>
+
+  <div class="divider"></div>
 
   <table class="table">
     <thead>
@@ -34,26 +48,31 @@
       <% employees.forEach(e => { %>
         <tr>
           <td>
-            <form method="post" action="/app/employees/<%= e.id %>/rename" class="inline-rename">
-              <input name="display_name" value="<%= e.display_name %>" />
-              <button class="btn btn-ghost" type="submit" title="Opslaan"><i data-lucide="save"></i></button>
+            <form method="post" action="/app/employees/<%= e.id %>/rename" class="form inline">
+              <input type="text" name="display_name" value="<%= e.display_name %>" />
+              <button class="btn btn-ghost" type="submit"><i data-lucide="save"></i></button>
             </form>
           </td>
           <td><span class="mono"><%= e.coupling_code %></span></td>
-          <td><span class="pill <%= e.status === 'active' ? 'ok' : 'muted' %>"><%= e.status %></span></td>
+          <td>
+            <span class="pill <%= e.status === 'active' ? 'ok' : 'muted' %>"><%= e.status %></span>
+          </td>
           <td class="right">
-            <form method="post" action="/app/employees/<%= e.id %>/toggle">
+            <form method="post" action="/app/employees/<%= e.id %>/toggle" style="display:inline;">
               <button class="btn btn-ghost" type="submit">
-                <i data-lucide="<%= e.status === 'active' ? 'user-x' : 'user-check' %>"></i>
-                <%= e.status === 'active' ? 'Deactiveren' : 'Activeren' %>
+                <i data-lucide="<%= e.status === 'active' ? 'pause' : 'play' %>"></i>
+                <%= e.status === 'active' ? 'Deactiveer' : 'Activeer' %>
               </button>
             </form>
           </td>
         </tr>
       <% }) %>
+
       <% if (!employees.length) { %>
         <tr><td colspan="4" class="muted">Nog geen werknemers.</td></tr>
       <% } %>
     </tbody>
   </table>
 </div>
+
+<%- include("../_layout_bottom") %>

@@ -1,3 +1,13 @@
+<%- include("../_layout_top", {
+  title: title,
+  chrome: chrome,
+  badge: badge,
+  topMeta: topMeta,
+  logoutAction: logoutAction,
+  tabs: tabs,
+  subtabs: subtabs
+}) %>
+
 <div class="card">
   <div class="row">
     <div>
@@ -98,3 +108,5 @@
     </table>
   <% } %>
 </div>
+
+<%- include("../_layout_bottom") %>
